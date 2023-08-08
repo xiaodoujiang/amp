@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bmilk.amp.ampService.mapper.AmpAppEnvRelMapper">
+
+    <resultMap id="AmpAppEnvRelEntity" type="cn.bmilk.amp.ampService.mapper.entity.AmpAppEnvRelEntity">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="unique_token" property="uniqueToken"/>
+        <result column="application_id" property="applicationId"/>
+        <result column="environment_id" property="environmentId"/>
+        <result column="colony_id" property="colonyId"/>
+    </resultMap>
+
+    <sql id="Base_column_list">
+        ID,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        APPLICATION_ID,
+        ENVIRONMENT_ID,
+        COLONY_ID
+    </sql>
+
+    <insert id="insert">
+        <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO AMP_APP_ENV_REL(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            APPLICATION_ID,
+            ENVIRONMENT_ID,
+            COLONY_ID
+        ) VALUE(
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.applicationId},
+            #{entity.environmentId},
+            #{entity.colonyId}
+        )
+    </insert>
+
+</mapper>

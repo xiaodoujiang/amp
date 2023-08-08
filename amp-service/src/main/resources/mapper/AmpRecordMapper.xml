@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.bmilk.amp.ampService.mapper.AmpRecordMapper">
+
+    <resultMap id = "AmpRecordEntity" type = "cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="unique_token" property="uniqueToken"/>
+        <result column="amp_no" property="ampNo"/>
+        <result column="environment_list" property="environmentList"/>
+        <result column="application_id" property="applicationId"/>
+        <result column="amp_desc" property="ampDesc"/>
+        <result column="amp_task_rel" property="ampTaskRel"/>
+        <result column="launch_date" property="launchDate"/>
+        <result column="create_user" property="createUser"/>
+    </resultMap>
+
+    <sql id="Base_column_list">
+        ID,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        AMP_NO,
+        ENVIRONMENT_LIST,
+        APPLICATION_ID,
+        AMP_DESC,
+        AMP_TASK_REL,
+        LAUNCH_DATE,
+        CREATE_USER
+    </sql>
+
+    <insert id="insert" >
+        <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO AMP_RECORD(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            AMP_NO,
+            ENVIRONMENT_LIST,
+            APPLICATION_ID,
+            AMP_DESC,
+            AMP_TASK_REL,
+            LAUNCH_DATE,
+            CREATE_USER
+        ) VALUE(
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.ampNo},
+            #{entity.environmentList},
+            #{entity.applicationId},
+            #{entity.ampDesc},
+            #{entity.ampTaskRel},
+            #{entity.launchDate},
+            #{entity.createUser}
+        )
+    </insert>
+</mapper>
