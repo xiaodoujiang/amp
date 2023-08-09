@@ -1,6 +1,6 @@
 package cn.bmilk.amp.ampService.service;
 
-import cn.bmilk.amp.ampService.dto.ApplicationDTO;
+import cn.bmilk.amp.ampService.dto.ApplicationRequestDTO;
 import cn.bmilk.amp.ampService.mapper.AmpApplicationMapper;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class ApplicationService {
     private AmpApplicationMapper applicationMapper;
 
 
-    public int createApplication(ApplicationDTO applicationDTO){
+    public int createApplication(ApplicationRequestDTO applicationRequestDTO){
         return 1;
     }
 

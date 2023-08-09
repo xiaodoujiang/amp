@@ -1,6 +1,6 @@
 package cn.bmilk.amp.ampService.controller;
 
-import cn.bmilk.amp.ampService.dto.ApplicationDTO;
+import cn.bmilk.amp.ampService.dto.ApplicationRequestDTO;
 import cn.bmilk.amp.ampService.service.ApplicationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class ApplicationController {
     public ApplicationService applicationService;
 
     @PostMapping("/create")
-    public int createApplication(@RequestBody ApplicationDTO applicationDTO){
+    public int createApplication(@RequestBody ApplicationRequestDTO applicationDTO){
         return applicationService.createApplication(applicationDTO);
     }
 }
