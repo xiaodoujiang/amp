@@ -36,4 +36,8 @@ public class AmpRecordEntity extends BaseEntity {
      * 创建人
      */
     private String createUser;
+    /**
+     * amp单状态
+     */
+    private String status;
 }

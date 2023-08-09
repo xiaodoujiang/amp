@@ -12,13 +12,13 @@
         <result column="create_at" property="createAt"/>
         <result column="update_at" property="updateAt"/>
         <result column="unique_token" property="uniqueToken"/>
+        <result column="amp_no" property="ampNo"/>
         <result column="amp_config_item_id" property="ampConfigItemId"/>
         <result column="update_user" property="updateUser"/>
         <result column="update_date" property="updateDate"/>
-        <result column="config_key" property="configKey"/>
         <result column="config_value" property="configValue"/>
-        <result column="config_type" property="configType"/>
         <result column="config_desc" property="configDesc"/>
+        <result column="update_type" property="updateType"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -28,16 +28,17 @@
         CREATE_AT,
         UPDATE_AT,
         UNIQUE_TOKEN,
+        AMP_NO,
         AMP_CONFIG_ITEM_ID,
         UPDATE_USER,
         UPDATE_DATE,
-        CONFIG_KEY,
         CONFIG_VALUE,
-        CONFIG_TYPE,
-        CONFIG_DESC
+        CONFIG_DESC,
+        UPDATE_TYPE
     </sql>
 
-    <insert id="insert" >
+
+    <insert id="insert" parameterType="">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -47,29 +48,27 @@
         CREATE_AT,
         UPDATE_AT,
         UNIQUE_TOKEN,
+        AMP_NO,
         AMP_CONFIG_ITEM_ID,
         UPDATE_USER,
         UPDATE_DATE,
-        CONFIG_KEY,
         CONFIG_VALUE,
-        CONFIG_TYPE,
-        CONFIG_DESC
+        CONFIG_DESC,
+        UPDATE_TYPE
         ) VALUE(
         NOW(),
         NOW(),
         'SYS',
         'SYS',
         0,
+        #{entity.ampNo},
         #{entity.ampConfigItemId},
         #{entity.updateUser},
         #{entity.updateDate},
-        #{entity.configKey},
         #{entity.configValue},
-        #{entity.configType},
-        #{entity.configDesc}
+        #{entity.configDesc},
+        #{entity.updateType}
         )
     </insert>
-
-
 
 </mapper>

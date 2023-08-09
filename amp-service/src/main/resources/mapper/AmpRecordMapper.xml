@@ -34,10 +34,11 @@
         AMP_DESC,
         AMP_TASK_REL,
         LAUNCH_DATE,
-        CREATE_USER
+        CREATE_USER,
+        STATUS
     </sql>
 
-    <insert id="insert" >
+    <insert id="insert">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -53,7 +54,8 @@
             AMP_DESC,
             AMP_TASK_REL,
             LAUNCH_DATE,
-            CREATE_USER
+            CREATE_USER,
+            STATUS
         ) VALUE(
             NOW(),
             NOW(),
@@ -66,7 +68,8 @@
             #{entity.ampDesc},
             #{entity.ampTaskRel},
             #{entity.launchDate},
-            #{entity.createUser}
+            #{entity.createUser},
+            #{entity.status}
         )
     </insert>
 </mapper>

@@ -17,4 +17,40 @@
         <result column="environment_id" property="environmentId"/>
     </resultMap>
 
+    <sql id="Base_column_list">
+        ID,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        COLONY_NAME,
+        COLONY_DESC,
+        ENVIRONMENT_ID
+    </sql>
+
+    <insert id="insert" parameterType="">
+        <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO AMP_COLONY(
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        COLONY_NAME,
+        COLONY_DESC,
+        ENVIRONMENT_ID
+        ) VALUE(
+        NOW(),
+        NOW(),
+        'SYS',
+        'SYS',
+        0,
+        #{entity.colonyName},
+        #{entity.colonyDesc},
+        #{entity.environmentId}
+        )
+    </insert>
 </mapper>

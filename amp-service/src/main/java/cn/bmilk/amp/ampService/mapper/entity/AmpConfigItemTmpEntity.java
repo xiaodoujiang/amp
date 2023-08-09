@@ -11,14 +11,6 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
      */
     private String ampNo;
     /**
-     * 应用名称
-     */
-    private String applicationName;
-    /**
-     * 环境名称
-     */
-    private String environmentName;
-    /**
      * 配置项key
      */
     private String configKey;
@@ -34,4 +26,12 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
      * 描述
      */
     private String configDesc;
+    /**
+     * 变更类型
+     */
+    private String updateType;
+    /**
+     * 状态
+     */
+    private String status;
 }

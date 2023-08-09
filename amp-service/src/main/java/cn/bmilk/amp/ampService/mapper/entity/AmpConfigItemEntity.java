@@ -7,13 +7,21 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AmpConfigItemEntity extends BaseEntity {
     /**
+     * 应用id
+     */
+    private long applicationId;
+    /**
      * 应用名称
      */
     private String applicationName;
     /**
-     * 环境名称
+     * 集群id
      */
-    private String environmentName;
+    private long colonyId;
+    /**
+     * 集群名称
+     */
+    private String colonyName;
     /**
      * 配置项key
      */

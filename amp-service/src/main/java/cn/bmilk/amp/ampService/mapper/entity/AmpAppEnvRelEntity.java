@@ -11,10 +11,6 @@ public class AmpAppEnvRelEntity extends BaseEntity {
      */
     private long applicationId;
     /**
-     * 环境Id
-     */
-    private long environmentId;
-    /**
      * 集群Id
      */
     private long colonyId;

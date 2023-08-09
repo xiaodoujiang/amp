@@ -3,6 +3,67 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="cn.bmilk.amp.ampService.mapper.AmpColonyConfigMapper">
+    <resultMap id = "AmpColonyConfigEntity" type = "cn.bmilk.amp.ampService.mapper.entity.AmpColonyConfigEntity">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="unique_token" property="uniqueToken"/>
+        <result column="colony_id" property="colonyId"/>
+        <result column="config_center_type" property="configCenterType"/>
+        <result column="config_center_address" property="configCenterAddress"/>
+        <result column="config_center_username" property="configCenterUsername"/>
+        <result column="config_center_password" property="configCenterPassword"/>
+        <result column="config_center_auth_key" property="configCenterAuthKey"/>
+    </resultMap>
+
+    <sql id="Base_column_list">
+        ID,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        COLONY_ID,
+        CONFIG_CENTER_TYPE,
+        CONFIG_CENTER_ADDRESS,
+        CONFIG_CENTER_USERNAME,
+        CONFIG_CENTER_PASSWORD,
+        CONFIG_CENTER_AUTH_KEY
+    </sql>
+
+    <insert id="insert" parameterType="">
+        <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO AMP_COLONY_CONFIG(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            COLONY_ID,
+            CONFIG_CENTER_TYPE,
+            CONFIG_CENTER_ADDRESS,
+            CONFIG_CENTER_USERNAME,
+            CONFIG_CENTER_PASSWORD,
+            CONFIG_CENTER_AUTH_KEY
+        ) VALUE(
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.colonyId},
+            #{entity.configCenterType},
+            #{entity.configCenterAddress},
+            #{entity.configCenterUsername},
+            #{entity.configCenterPassword},
+            #{entity.configCenterAuthKey}
+        )
+    </insert>
 
 </mapper>

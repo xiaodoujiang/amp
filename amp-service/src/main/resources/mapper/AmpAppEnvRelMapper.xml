@@ -13,7 +13,6 @@
         <result column="update_at" property="updateAt"/>
         <result column="unique_token" property="uniqueToken"/>
         <result column="application_id" property="applicationId"/>
-        <result column="environment_id" property="environmentId"/>
         <result column="colony_id" property="colonyId"/>
     </resultMap>
 
@@ -25,11 +24,10 @@
         UPDATE_AT,
         UNIQUE_TOKEN,
         APPLICATION_ID,
-        ENVIRONMENT_ID,
         COLONY_ID
     </sql>
 
-    <insert id="insert">
+    <insert id="insert" parameterType="">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -40,7 +38,6 @@
             UPDATE_AT,
             UNIQUE_TOKEN,
             APPLICATION_ID,
-            ENVIRONMENT_ID,
             COLONY_ID
         ) VALUE(
             NOW(),
@@ -49,7 +46,6 @@
             'SYS',
             0,
             #{entity.applicationId},
-            #{entity.environmentId},
             #{entity.colonyId}
         )
     </insert>
