@@ -1,9 +1,12 @@
 package cn.bmilk.amp.ampService.mapper.entity;
 
+import cn.bmilk.amp.ampService.common.AmpStatusEnum;
+import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,7 +22,7 @@ public class AmpRecordEntity extends BaseEntity {
     /**
      * 应用id
      */
-    private String applicationId;
+    private Long applicationId;
     /**
      * 项目描述
      */
@@ -40,4 +43,21 @@ public class AmpRecordEntity extends BaseEntity {
      * amp单状态
      */
     private String status;
+
+
+    public static AmpRecordEntity buildAmpRecordEntity(AmpRecordRequestDTO ampRecordRequestDTO,
+                                                       String ampNo) {
+        AmpRecordEntity result = new AmpRecordEntity();
+
+        result.setAmpNo(ampNo);
+        result.setEnvironmentList(ampRecordRequestDTO.getEnvironmentList().stream().map(String::valueOf).collect(Collectors.joining(",")));
+        result.setApplicationId(ampRecordRequestDTO.getApplicationId());
+        result.setAmpDesc(ampRecordRequestDTO.getAmpDesc());
+        result.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
+        result.setLaunchDate(ampRecordRequestDTO.getLaunchDate());
+        result.setCreateUser(ampRecordRequestDTO.getCreateUser());
+        result.setStatus(AmpStatusEnum.NEW.name());
+        result.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
+        return result;
+    }
 }

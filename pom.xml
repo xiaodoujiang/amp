@@ -12,6 +12,7 @@
     <modules>
         <module>nacos-gw</module>
         <module>amp-service</module>
+        <module>common</module>
     </modules>
 
     <properties>
@@ -23,6 +24,9 @@
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <lombok.version>1.18.24</lombok.version>
         <mybaits.version>2.3.1</mybaits.version>
+        <bmilk.common.version>1.0-SNAPSHOT</bmilk.common.version>
+        <jdbc.mariadb.version>3.1.4</jdbc.mariadb.version>
+        <apache.common-lang3.version>3.13.0</apache.common-lang3.version>
     </properties>
 
     <dependencyManagement>
@@ -70,6 +74,23 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybaits.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.bmilk.amp</groupId>
+                <artifactId>common</artifactId>
+                <version>${bmilk.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${jdbc.mariadb.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.common-lang3.version}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>

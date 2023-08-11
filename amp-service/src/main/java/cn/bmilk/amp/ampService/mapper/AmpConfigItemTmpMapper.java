@@ -4,14 +4,15 @@ import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface AmpConfigItemTmpMapper {
 
     /**
-     * 插入一条临时配置
-     * @param ampConfigItemTmpEntity
+     * 批量插入临时配置
      */
-    void insert(@Param("entity") AmpConfigItemTmpEntity ampConfigItemTmpEntity);
+    void batchInsert(@Param("entityList") List<AmpConfigItemTmpEntity> entityList);
 
 
 }

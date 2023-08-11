@@ -31,7 +31,8 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
      */
     private String updateType;
     /**
-     * 状态
+     * 环境名称
      */
-    private String status;
+    private String environmentName;
+
 }
