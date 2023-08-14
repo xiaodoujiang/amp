@@ -14,5 +14,10 @@ public interface AmpConfigItemTmpMapper {
      */
     void batchInsert(@Param("entityList") List<AmpConfigItemTmpEntity> entityList);
 
-
+    /**
+     * 查询配置列表
+     * @param ampNo amp单号
+     * @return {@link AmpConfigItemTmpEntity}
+     */
+    List<AmpConfigItemTmpEntity> queryConfigListByAmpNo(@Param("ampNo") String ampNo);
 }

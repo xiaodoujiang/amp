@@ -1,5 +1,6 @@
 package cn.bmilk.amp.ampService.dto;
 
+import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
 import lombok.Data;
 
 @Data
@@ -27,4 +28,20 @@ public class ConfigResponseDTO {
      * 更新类型
      */
     private String updateType;
+    /**
+     * 环境名称
+     */
+    private String environmentName;
+
+    public ConfigResponseDTO() {
+    }
+
+    public ConfigResponseDTO(AmpConfigItemTmpEntity ampConfigItemTmpEntity){
+        this.configKey = ampConfigItemTmpEntity.getConfigKey();
+        this.configValue=ampConfigItemTmpEntity.getConfigValue();
+        this.configType= ampConfigItemTmpEntity.getConfigType();
+        this.configDesc = ampConfigItemTmpEntity.getConfigDesc();
+        this.updateType = ampConfigItemTmpEntity.getUpdateType();
+        this.environmentName = ampConfigItemTmpEntity.getEnvironmentName();
+    }
 }

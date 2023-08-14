@@ -31,6 +31,12 @@ public class AmpController {
         return CommonResp.SUCCESS(responseDTO);
     }
 
+    @GetMapping
+    public CommonResp<AmpRecordResponseDTO> queryAmpRecord(@RequestParam(value = "ampNo") String ampNo){
+        AmpRecordResponseDTO responseDTO = ampService.queryAmpRecord(ampNo);
+        return CommonResp.SUCCESS(responseDTO);
+    }
+
     @GetMapping("/param")
     public AmpRecordRequestDTO get(){
         AmpRecordRequestDTO ampRecordRequestDTO = new AmpRecordRequestDTO();

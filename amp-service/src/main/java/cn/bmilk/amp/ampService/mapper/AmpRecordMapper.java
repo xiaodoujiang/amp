@@ -13,4 +13,11 @@ public interface AmpRecordMapper {
      */
     void insert(@Param("entity") AmpRecordEntity ampRecordEntity);
 
+    /**
+     * 根据amp单号查询amp详情
+     * @param ampNo amp单号
+     * @return {@link AmpRecordEntity}
+     */
+    AmpRecordEntity queryAmpRecord(@Param("ampNo") String ampNo);
+
 }

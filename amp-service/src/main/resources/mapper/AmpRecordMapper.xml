@@ -70,4 +70,11 @@
             #{entity.status}
         )
     </insert>
+
+    <select id="queryAmpRecord" resultMap="AmpRecordEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_RECORD
+        where AMP_NO = #{ampNo} and UNIQUE_TOKEN=0
+    </select>
 </mapper>

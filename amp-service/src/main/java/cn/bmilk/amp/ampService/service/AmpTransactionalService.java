@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AmpTransactionalService {
@@ -34,41 +35,35 @@ public class AmpTransactionalService {
         if(ampRecordRequestDTO.isMulEnvConfigConsistent()){
             for (String env : ampRecordRequestDTO.getEnvironmentList()){
                 String envValue = new ArrayList<>(ampRecordRequestDTO.getEnvConfigMap().keySet()).get(0);
-                for (ConfigResponseDTO configResponseDTO: ampRecordRequestDTO.getEnvConfigMap().get(envValue)){
-                    AmpConfigItemTmpEntity ampConfigItemTmpEntity = new AmpConfigItemTmpEntity();
-                    ampConfigItemTmpEntity.setAmpNo(ampNo);
-                    ampConfigItemTmpEntity.setConfigDesc(configResponseDTO.getConfigDesc());
-                    ampConfigItemTmpEntity.setConfigKey(configResponseDTO.getConfigKey());
-                    ampConfigItemTmpEntity.setConfigValue(configResponseDTO.getConfigValue());
-                    ampConfigItemTmpEntity.setConfigType(StringUtils.isBlank(configResponseDTO.getConfigType())?
-                            ConfigTypeEnum.NORMAL_CONFIG.name() : configResponseDTO.getConfigType());
-                    ampConfigItemTmpEntity.setUpdateType(StringUtils.isBlank(configResponseDTO.getUpdateType())?
-                            ConfigUpdateTypeEnum.CREATE.name() : configResponseDTO.getUpdateType());
-                    ampConfigItemTmpEntity.setEnvironmentName(env);
-                    ampConfigItemTmpEntityList.add(ampConfigItemTmpEntity);
-                }
+                ampConfigItemTmpEntityList.addAll(buildConfigItemTmpList(ampRecordRequestDTO.getEnvConfigMap().get(envValue), env, ampNo));
             }
         }else {
             for (String env : ampRecordRequestDTO.getEnvConfigMap().keySet()){
-                for (ConfigResponseDTO configResponseDTO: ampRecordRequestDTO.getEnvConfigMap().get(env)){
-                    AmpConfigItemTmpEntity ampConfigItemTmpEntity = new AmpConfigItemTmpEntity();
-                    ampConfigItemTmpEntity.setAmpNo(ampNo);
-                    ampConfigItemTmpEntity.setConfigDesc(configResponseDTO.getConfigDesc());
-                    ampConfigItemTmpEntity.setConfigKey(configResponseDTO.getConfigKey());
-                    ampConfigItemTmpEntity.setConfigValue(configResponseDTO.getConfigValue());
-                    ampConfigItemTmpEntity.setConfigType(StringUtils.isBlank(configResponseDTO.getConfigType())?
-                            ConfigTypeEnum.NORMAL_CONFIG.name() : configResponseDTO.getConfigType());
-                    ampConfigItemTmpEntity.setUpdateType(StringUtils.isBlank(configResponseDTO.getUpdateType())?
-                            ConfigUpdateTypeEnum.CREATE.name() : configResponseDTO.getUpdateType());
-                    ampConfigItemTmpEntity.setEnvironmentName(env);
-                    ampConfigItemTmpEntityList.add(ampConfigItemTmpEntity);
-                }
+                ampConfigItemTmpEntityList.addAll(buildConfigItemTmpList(ampRecordRequestDTO.getEnvConfigMap().get(env), env, ampNo));
             }
         }
         ampRecordMapper.insert(ampRecordEntity);
         ampConfigItemTmpMapper.batchInsert(ampConfigItemTmpEntityList);
     }
 
+
+    private  List<AmpConfigItemTmpEntity> buildConfigItemTmpList(List<ConfigResponseDTO> envConfigList, String env, String ampNo){
+        List<AmpConfigItemTmpEntity> result = new ArrayList<>();
+        for (ConfigResponseDTO configResponseDTO: envConfigList){
+            AmpConfigItemTmpEntity ampConfigItemTmpEntity = new AmpConfigItemTmpEntity();
+            ampConfigItemTmpEntity.setAmpNo(ampNo);
+            ampConfigItemTmpEntity.setConfigDesc(configResponseDTO.getConfigDesc());
+            ampConfigItemTmpEntity.setConfigKey(configResponseDTO.getConfigKey());
+            ampConfigItemTmpEntity.setConfigValue(configResponseDTO.getConfigValue());
+            ampConfigItemTmpEntity.setConfigType(StringUtils.isBlank(configResponseDTO.getConfigType())?
+                    ConfigTypeEnum.NORMAL_CONFIG.name() : configResponseDTO.getConfigType());
+            ampConfigItemTmpEntity.setUpdateType(StringUtils.isBlank(configResponseDTO.getUpdateType())?
+                    ConfigUpdateTypeEnum.CREATE.name() : configResponseDTO.getUpdateType());
+            ampConfigItemTmpEntity.setEnvironmentName(env);
+            result.add(ampConfigItemTmpEntity);
+        }
+        return result;
+    }
 
 
 

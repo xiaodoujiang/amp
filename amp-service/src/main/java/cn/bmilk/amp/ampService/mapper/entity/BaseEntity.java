@@ -9,7 +9,7 @@ public class BaseEntity {
     /**
      * 主键
      */
-    private long id;
+    private Long id;
     /**
      * 创建时间
      */

@@ -2,12 +2,15 @@ package cn.bmilk.amp.ampService.service;
 
 import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
 import cn.bmilk.amp.ampService.dto.AmpRecordResponseDTO;
+import cn.bmilk.amp.ampService.dto.ConfigResponseDTO;
+import cn.bmilk.amp.ampService.mapper.AmpConfigItemTmpMapper;
 import cn.bmilk.amp.ampService.mapper.AmpRecordMapper;
-import org.checkerframework.checker.units.qual.A;
+import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
+import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.*;
 
 @Service
 public class AmpService {
@@ -17,6 +20,9 @@ public class AmpService {
 
     @Resource
     private AmpTransactionalService ampTransactionalService;
+
+    @Resource
+    private AmpConfigItemTmpMapper ampConfigItemTmpMapper;
 
     public AmpRecordResponseDTO createAmp(AmpRecordRequestDTO ampRecordRequestDTO) {
         if(ampRecordRequestDTO.isMulEnvConfigConsistent()){
@@ -40,4 +46,41 @@ public class AmpService {
         ampRecordResponseDTO.setAmpNo(ampNo);
         return ampRecordResponseDTO;
     }
+
+    public AmpRecordResponseDTO queryAmpRecord(String ampNo){
+        AmpRecordEntity ampRecordEntity = ampRecordMapper.queryAmpRecord(ampNo);
+        if(null == ampRecordEntity || null == ampRecordEntity.getId()){
+            return new AmpRecordResponseDTO();
+        }
+        List<AmpConfigItemTmpEntity> configItemList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
+        return buildAmpRecordResponseDTO(ampRecordEntity, configItemList);
+    }
+
+    private AmpRecordResponseDTO buildAmpRecordResponseDTO(AmpRecordEntity ampRecordEntity,
+                                                           List<AmpConfigItemTmpEntity> configItemList){
+        AmpRecordResponseDTO result = new AmpRecordResponseDTO();
+        result.setAmpNo(ampRecordEntity.getAmpNo());
+        result.setAmpDesc(ampRecordEntity.getAmpDesc());
+        result.setAmpTaskRel(ampRecordEntity.getAmpTaskRel());
+        result.setApplicationId(ampRecordEntity.getApplicationId());
+        result.setEnvironmentList(Arrays.asList(ampRecordEntity.getEnvironmentList().split(",")));
+        result.setStatus(ampRecordEntity.getStatus());
+        result.setEnvConfigMap(buildEnvConfigMap(configItemList));
+        return result;
+    }
+
+    private Map<String, List<ConfigResponseDTO>> buildEnvConfigMap(List<AmpConfigItemTmpEntity> configItemList){
+        Map<String, List<ConfigResponseDTO>> result = new HashMap<>();
+        for (AmpConfigItemTmpEntity ampConfigItemTmpEntity : configItemList) {
+            if(result.containsKey(ampConfigItemTmpEntity.getEnvironmentName())){
+                result.get(ampConfigItemTmpEntity.getEnvironmentName()).add(new ConfigResponseDTO(ampConfigItemTmpEntity));
+            }else {
+                List<ConfigResponseDTO> configResponseDTOList = new ArrayList<>();
+                configResponseDTOList.add(new ConfigResponseDTO(ampConfigItemTmpEntity));
+                result.put(ampConfigItemTmpEntity.getEnvironmentName(), configResponseDTOList);
+            }
+        }
+        return result;
+    }
+
 }
