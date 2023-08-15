@@ -77,4 +77,13 @@
         from AMP_RECORD
         where AMP_NO = #{ampNo} and UNIQUE_TOKEN=0
     </select>
+
+    <select id="queryAmpRecordList" resultMap="AmpRecordEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_RECORD
+        where CREATE_USER = #{createUser} and UNIQUE_TOKEN=0
+        order by ID desc
+        limit #{offset}, #{count}
+    </select>
 </mapper>
