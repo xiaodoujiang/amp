@@ -1,4 +1,4 @@
-package cn.bmilk.amp.response;
+package cn.bmilk.amp.gwcommon.response;
 
 public enum ResponseCodeEnum {
 

@@ -8,7 +8,7 @@
     </parent>
 
     <groupId>cn.bmilk.amp</groupId>
-    <artifactId>common</artifactId>
+    <artifactId>gw-common</artifactId>
     <packaging>jar</packaging>
 
     <name>common</name>

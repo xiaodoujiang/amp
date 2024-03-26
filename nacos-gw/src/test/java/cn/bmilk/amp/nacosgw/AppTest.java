@@ -1,4 +1,4 @@
-package cn.bmilk;
+package cn.bmilk.amp.nacosgw;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
