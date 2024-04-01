@@ -69,6 +69,11 @@ public class AmpService {
         return result;
     }
 
+    public List<AmpRecordResponseDTO> queryAmpRecordList(String startDateStr, String endDateStr){
+        return  null;
+
+    }
+
     private Map<String, List<ConfigResponseDTO>> buildEnvConfigMap(List<AmpConfigItemTmpEntity> configItemList){
         Map<String, List<ConfigResponseDTO>> result = new HashMap<>();
         for (AmpConfigItemTmpEntity ampConfigItemTmpEntity : configItemList) {

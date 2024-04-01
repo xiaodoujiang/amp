@@ -12,7 +12,6 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="colony_name" property="colonyName"/>
         <result column="colony_desc" property="colonyDesc"/>
-        <result column="environment_id" property="environmentId"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -23,8 +22,7 @@
         UPDATE_AT,
         UNIQUE_TOKEN,
         COLONY_NAME,
-        COLONY_DESC,
-        ENVIRONMENT_ID
+        COLONY_DESC
     </sql>
 
     <insert id="insert">
@@ -32,23 +30,21 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO AMP_COLONY(
-        CREATE_TIME,
-        UPDATE_TIME,
-        CREATE_AT,
-        UPDATE_AT,
-        UNIQUE_TOKEN,
-        COLONY_NAME,
-        COLONY_DESC,
-        ENVIRONMENT_ID
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            COLONY_NAME,
+            COLONY_DESC
         ) VALUE(
-        NOW(),
-        NOW(),
-        'SYS',
-        'SYS',
-        0,
-        #{entity.colonyName},
-        #{entity.colonyDesc},
-        #{entity.environmentId}
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.colonyName},
+            #{entity.colonyDesc}
         )
     </insert>
 </mapper>

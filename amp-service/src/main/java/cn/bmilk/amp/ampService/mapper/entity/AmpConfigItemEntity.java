@@ -15,14 +15,6 @@ public class AmpConfigItemEntity extends BaseEntity {
      */
     private String applicationName;
     /**
-     * 集群id
-     */
-    private long colonyId;
-    /**
-     * 集群名称
-     */
-    private String colonyName;
-    /**
      * 配置项key
      */
     private String configKey;

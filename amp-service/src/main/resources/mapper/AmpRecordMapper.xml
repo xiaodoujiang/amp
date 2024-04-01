@@ -17,6 +17,10 @@
         <result column="amp_task_rel" property="ampTaskRel"/>
         <result column="launch_date" property="launchDate"/>
         <result column="create_user" property="createUser"/>
+        <result column="status" property="status"/>
+        <result column="type" property="type"/>
+        <result column="child_amp_list" property="childAmpList"/>
+        <result column="operator" property="operator"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -33,7 +37,10 @@
         AMP_TASK_REL,
         LAUNCH_DATE,
         CREATE_USER,
-        STATUS
+        STATUS,
+        TYPE,
+        CHILD_AMP_LIST,
+        OPERATOR
     </sql>
 
     <insert id="insert">
@@ -53,7 +60,10 @@
             AMP_TASK_REL,
             LAUNCH_DATE,
             CREATE_USER,
-            STATUS
+            STATUS,
+            TYPE,
+            CHILD_AMP_LIST,
+            OPERATOR
         ) VALUE(
             NOW(),
             NOW(),
@@ -67,7 +77,10 @@
             #{entity.ampTaskRel},
             #{entity.launchDate},
             #{entity.createUser},
-            #{entity.status}
+            #{entity.status},
+            #{entity.type},
+            #{entity.childAmpList},
+            #{entity.operator}
         )
     </insert>
 

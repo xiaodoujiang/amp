@@ -7,15 +7,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AmpColonyEntity extends BaseEntity {
     /**
-     * 集群名称名称
+     * 环境名称
      */
     private String colonyName;
     /**
-     * 应用描述
+     * 环境描述
      */
     private String colonyDesc;
-    /**
-     * 所属环境Id
-     */
-    private long environmentId;
 }

@@ -4,9 +4,8 @@ import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
 import cn.bmilk.amp.ampService.dto.AmpRecordResponseDTO;
 import cn.bmilk.amp.ampService.dto.ConfigResponseDTO;
 import cn.bmilk.amp.ampService.service.AmpService;
-import cn.bmilk.amp.response.CommonResp;
 
-import cn.bmilk.amp.response.ResponseCodeEnum;
+import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +34,13 @@ public class AmpController {
     public CommonResp<AmpRecordResponseDTO> queryAmpRecord(@RequestParam(value = "ampNo") String ampNo){
         AmpRecordResponseDTO responseDTO = ampService.queryAmpRecord(ampNo);
         return CommonResp.SUCCESS(responseDTO);
+    }
+
+    @GetMapping("/list")
+    public CommonResp<List<AmpRecordResponseDTO>> queryAmpRecordList(@RequestParam(value = "startDate") String startDateStr,
+                                                                     @RequestParam(value = "endDate") String endDateStr){
+        List<AmpRecordResponseDTO> ampRecordResponseDTOList = ampService.queryAmpRecordList(startDateStr, endDateStr);
+        return CommonResp.SUCCESS(ampRecordResponseDTOList);
     }
 
     @GetMapping("/param")

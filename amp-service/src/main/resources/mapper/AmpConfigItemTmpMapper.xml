@@ -15,7 +15,6 @@
         <result column="config_value" property="configValue"/>
         <result column="config_type" property="configType"/>
         <result column="config_desc" property="configDesc"/>
-        <result column="update_type" property="updateType"/>
         <result column="environment_name" property="environmentName"/>
     </resultMap>
 
@@ -31,12 +30,11 @@
         CONFIG_VALUE,
         CONFIG_TYPE,
         CONFIG_DESC,
-        UPDATE_TYPE,
         ENVIRONMENT_NAME
     </sql>
 
-    <insert id="batchInsert" parameterType="java.util.List">
-        <selectKey keyColumn="id" keyProperty="id" resultType="long" order="AFTER">
+    <insert id="insert">
+        <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO AMP_CONFIG_ITEM_TMP(
@@ -50,11 +48,9 @@
             CONFIG_VALUE,
             CONFIG_TYPE,
             CONFIG_DESC,
-            UPDATE_TYPE,
             ENVIRONMENT_NAME
-        ) VALUES
-        <foreach collection="entityList" index="index" item="entity" separator=",">
-            (NOW(),
+        ) VALUE(
+            NOW(),
             NOW(),
             'SYS',
             'SYS',
@@ -64,9 +60,8 @@
             #{entity.configValue},
             #{entity.configType},
             #{entity.configDesc},
-            #{entity.updateType},
-            #{entity.environmentName})
-        </foreach>
+            #{entity.environmentName}
+        )
     </insert>
 
     <select id="queryConfigListByAmpNo" resultMap="AmpConfigItemTmpEntity">

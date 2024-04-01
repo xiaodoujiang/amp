@@ -38,4 +38,8 @@ public class AmpApplicationEntity extends BaseEntity {
      * 配置中心租户
      */
     private String configTenant;
+    /**
+     * 操作员
+     */
+    private String operator;
 }

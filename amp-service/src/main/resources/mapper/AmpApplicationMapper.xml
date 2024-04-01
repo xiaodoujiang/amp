@@ -16,6 +16,7 @@
         <result column="path_env_value" property="pathEnvValue"/>
         <result column="config_center_type" property="configCenterType"/>
         <result column="config_tenant" property="configTenant"/>
+        <result column="operator" property="operator"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -32,10 +33,11 @@
         PATH_ENV_KEY,
         PATH_ENV_VALUE,
         CONFIG_CENTER_TYPE,
-        CONFIG_TENANT
+        CONFIG_TENANT,
+        OPERATOR
     </sql>
 
-    <insert id="insert">
+    <insert id="insert" parameterType="">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -52,7 +54,8 @@
             PATH_ENV_KEY,
             PATH_ENV_VALUE,
             CONFIG_CENTER_TYPE,
-            CONFIG_TENANT
+            CONFIG_TENANT,
+            OPERATOR
         ) VALUE(
             NOW(),
             NOW(),
@@ -66,7 +69,8 @@
             #{entity.pathEnvKey},
             #{entity.pathEnvValue},
             #{entity.configCenterType},
-            #{entity.configTenant}
+            #{entity.configTenant},
+            #{entity.operator}
         )
     </insert>
 

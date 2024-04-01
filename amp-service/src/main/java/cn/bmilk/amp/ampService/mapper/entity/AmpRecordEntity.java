@@ -22,7 +22,7 @@ public class AmpRecordEntity extends BaseEntity {
     /**
      * 应用id
      */
-    private Long applicationId;
+    private long applicationId;
     /**
      * 项目描述
      */
@@ -43,6 +43,18 @@ public class AmpRecordEntity extends BaseEntity {
      * amp单状态
      */
     private String status;
+    /**
+     * 类型
+     */
+    private String type;
+    /**
+     * 子单
+     */
+    private String childAmpList;
+    /**
+     * 推送人员
+     */
+    private String operator;
 
 
     public static AmpRecordEntity buildAmpRecordEntity(AmpRecordRequestDTO ampRecordRequestDTO,

@@ -37,4 +37,5 @@ public class AmpConfigItemHisEntity extends BaseEntity {
      * 变更类型
      */
     private String updateType;
+
 }

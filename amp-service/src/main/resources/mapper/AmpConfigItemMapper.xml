@@ -12,8 +12,6 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="application_id" property="applicationId"/>
         <result column="application_name" property="applicationName"/>
-        <result column="colony_id" property="colonyId"/>
-        <result column="colony_name" property="colonyName"/>
         <result column="config_key" property="configKey"/>
         <result column="config_value" property="configValue"/>
         <result column="config_type" property="configType"/>
@@ -29,8 +27,6 @@
         UNIQUE_TOKEN,
         APPLICATION_ID,
         APPLICATION_NAME,
-        COLONY_ID,
-        COLONY_NAME,
         CONFIG_KEY,
         CONFIG_VALUE,
         CONFIG_TYPE,
@@ -42,33 +38,29 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO AMP_CONFIG_ITEM(
-        CREATE_TIME,
-        UPDATE_TIME,
-        CREATE_AT,
-        UPDATE_AT,
-        UNIQUE_TOKEN,
-        APPLICATION_ID,
-        APPLICATION_NAME,
-        COLONY_ID,
-        COLONY_NAME,
-        CONFIG_KEY,
-        CONFIG_VALUE,
-        CONFIG_TYPE,
-        CONFIG_DESC
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            APPLICATION_ID,
+            APPLICATION_NAME,
+            CONFIG_KEY,
+            CONFIG_VALUE,
+            CONFIG_TYPE,
+            CONFIG_DESC
         ) VALUE(
-        NOW(),
-        NOW(),
-        'SYS',
-        'SYS',
-        0,
-        #{entity.applicationId},
-        #{entity.applicationName},
-        #{entity.colonyId},
-        #{entity.colonyName},
-        #{entity.configKey},
-        #{entity.configValue},
-        #{entity.configType},
-        #{entity.configDesc}
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.applicationId},
+            #{entity.applicationName},
+            #{entity.configKey},
+            #{entity.configValue},
+            #{entity.configType},
+            #{entity.configDesc}
         )
     </insert>
 
