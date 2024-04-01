@@ -25,17 +25,17 @@ public class AmpService {
     private AmpConfigItemTmpMapper ampConfigItemTmpMapper;
 
     public AmpRecordResponseDTO createAmp(AmpRecordRequestDTO ampRecordRequestDTO) {
-        if(ampRecordRequestDTO.isMulEnvConfigConsistent()){
-            if(ampRecordRequestDTO.getEnvConfigMap().size()>1){
+        if (ampRecordRequestDTO.isMulEnvConfigConsistent()) {
+            if (ampRecordRequestDTO.getEnvConfigMap().size() > 1) {
                 throw new IllegalArgumentException("too many env config, MulEnvConfigConsistent");
             }
-        }else {
+        } else {
 
-            if(ampRecordRequestDTO.getEnvironmentList().size() != ampRecordRequestDTO.getEnvConfigMap().size()){
+            if (ampRecordRequestDTO.getEnvironmentList().size() != ampRecordRequestDTO.getEnvConfigMap().size()) {
                 throw new IllegalArgumentException("env and envConfig not match");
             }
-            for (String env : ampRecordRequestDTO.getEnvironmentList()){
-                if(!ampRecordRequestDTO.getEnvConfigMap().containsKey(env)){
+            for (String env : ampRecordRequestDTO.getEnvironmentList()) {
+                if (!ampRecordRequestDTO.getEnvConfigMap().containsKey(env)) {
                     throw new IllegalArgumentException("env and envConfig not match");
                 }
             }
@@ -47,18 +47,30 @@ public class AmpService {
         return ampRecordResponseDTO;
     }
 
-    public AmpRecordResponseDTO queryAmpRecord(String ampNo){
+    public AmpRecordResponseDTO queryAmpRecord(String ampNo) {
         AmpRecordEntity ampRecordEntity = ampRecordMapper.queryAmpRecord(ampNo);
-        if(null == ampRecordEntity || null == ampRecordEntity.getId()){
+        if (null == ampRecordEntity || null == ampRecordEntity.getId()) {
             return new AmpRecordResponseDTO();
         }
         List<AmpConfigItemTmpEntity> configItemList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
         return buildAmpRecordResponseDTO(ampRecordEntity, configItemList);
     }
 
+    public List<AmpRecordResponseDTO>  queryAmpRecordList(String createUser, int pageSize, int pageNo) {
+        List<AmpRecordEntity> ampRecordEntityList = ampRecordMapper.queryAmpRecordList(createUser, (pageNo - 1) * pageSize, pageSize);
+        List<AmpRecordResponseDTO> result = new ArrayList<>();
+        for (AmpRecordEntity ampRecordEntity : ampRecordEntityList) {
+            result.add(buildAmpRecordResponseDTO(ampRecordEntity, null));
+        }
+        return result;
+    }
+
     private AmpRecordResponseDTO buildAmpRecordResponseDTO(AmpRecordEntity ampRecordEntity,
-                                                           List<AmpConfigItemTmpEntity> configItemList){
+                                                           List<AmpConfigItemTmpEntity> configItemList) {
+        if (null == ampRecordEntity) return null;
         AmpRecordResponseDTO result = new AmpRecordResponseDTO();
+        result.setId(ampRecordEntity.getId());
+        result.setCreateDate(ampRecordEntity.getCreateTime());
         result.setAmpNo(ampRecordEntity.getAmpNo());
         result.setAmpDesc(ampRecordEntity.getAmpDesc());
         result.setAmpTaskRel(ampRecordEntity.getAmpTaskRel());
@@ -69,17 +81,13 @@ public class AmpService {
         return result;
     }
 
-    public List<AmpRecordResponseDTO> queryAmpRecordList(String startDateStr, String endDateStr){
-        return  null;
-
-    }
-
-    private Map<String, List<ConfigResponseDTO>> buildEnvConfigMap(List<AmpConfigItemTmpEntity> configItemList){
+    private Map<String, List<ConfigResponseDTO>> buildEnvConfigMap(List<AmpConfigItemTmpEntity> configItemList) {
+        if (null == configItemList) return null;
         Map<String, List<ConfigResponseDTO>> result = new HashMap<>();
         for (AmpConfigItemTmpEntity ampConfigItemTmpEntity : configItemList) {
-            if(result.containsKey(ampConfigItemTmpEntity.getEnvironmentName())){
+            if (result.containsKey(ampConfigItemTmpEntity.getEnvironmentName())) {
                 result.get(ampConfigItemTmpEntity.getEnvironmentName()).add(new ConfigResponseDTO(ampConfigItemTmpEntity));
-            }else {
+            } else {
                 List<ConfigResponseDTO> configResponseDTOList = new ArrayList<>();
                 configResponseDTOList.add(new ConfigResponseDTO(ampConfigItemTmpEntity));
                 result.put(ampConfigItemTmpEntity.getEnvironmentName(), configResponseDTOList);

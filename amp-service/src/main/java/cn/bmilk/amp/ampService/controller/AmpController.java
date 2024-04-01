@@ -19,9 +19,9 @@ public class AmpController {
     private AmpService ampService;
 
     @PostMapping("/create")
-    public CommonResp<AmpRecordResponseDTO> createAmp(@RequestBody AmpRecordRequestDTO recordRequestDTO){
+    public CommonResp<AmpRecordResponseDTO> createAmp(@RequestBody AmpRecordRequestDTO recordRequestDTO) {
         String verify = verifyCreateAmp(recordRequestDTO);
-        if(StringUtils.isNoneBlank(verifyCreateAmp(recordRequestDTO))){
+        if (StringUtils.isNoneBlank(verifyCreateAmp(recordRequestDTO))) {
             return CommonResp.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
         }
 
@@ -30,9 +30,17 @@ public class AmpController {
         return CommonResp.SUCCESS(responseDTO);
     }
 
-    @GetMapping
-    public CommonResp<AmpRecordResponseDTO> queryAmpRecord(@RequestParam(value = "ampNo") String ampNo){
+    @GetMapping("/ampNo")
+    public CommonResp<AmpRecordResponseDTO> queryAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
         AmpRecordResponseDTO responseDTO = ampService.queryAmpRecord(ampNo);
+        return CommonResp.SUCCESS(responseDTO);
+    }
+
+    @GetMapping("/list/user")
+    public CommonResp<List<AmpRecordResponseDTO>> queryAmpRecordList(@RequestParam("user") String createUser,
+                                                                     @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                                                     @RequestParam(name = "pageNo",  required = false, defaultValue = "1") int pageNo) {
+        List<AmpRecordResponseDTO> responseDTO = ampService.queryAmpRecordList(createUser, pageSize, pageNo);
         return CommonResp.SUCCESS(responseDTO);
     }
 
@@ -44,7 +52,7 @@ public class AmpController {
     }
 
     @GetMapping("/param")
-    public AmpRecordRequestDTO get(){
+    public AmpRecordRequestDTO get() {
         AmpRecordRequestDTO ampRecordRequestDTO = new AmpRecordRequestDTO();
         ampRecordRequestDTO.setApplicationId(1L);
         ampRecordRequestDTO.setAmpDesc("测试");
@@ -78,25 +86,24 @@ public class AmpController {
         return ampRecordRequestDTO;
 
 
-
     }
 
 
-    private String verifyCreateAmp(AmpRecordRequestDTO recordRequestDTO){
-        if(null == recordRequestDTO){
+    private String verifyCreateAmp(AmpRecordRequestDTO recordRequestDTO) {
+        if (null == recordRequestDTO) {
             return "requestDTO is null";
         }
         StringBuilder sb = new StringBuilder();
-        if(null == recordRequestDTO.getEnvironmentList() || recordRequestDTO.getEnvironmentList().isEmpty()){
+        if (null == recordRequestDTO.getEnvironmentList() || recordRequestDTO.getEnvironmentList().isEmpty()) {
             sb.append("EnvironmentList is null");
         }
-        if(null == recordRequestDTO.getApplicationId()){
+        if (null == recordRequestDTO.getApplicationId()) {
             sb.append("ApplicationId is null");
         }
-        if(StringUtils.isBlank(recordRequestDTO.getCreateUser())){
+        if (StringUtils.isBlank(recordRequestDTO.getCreateUser())) {
             sb.append("CreateUser is null");
         }
-        if(null == recordRequestDTO.getEnvConfigMap() || recordRequestDTO.getEnvConfigMap().isEmpty()){
+        if (null == recordRequestDTO.getEnvConfigMap() || recordRequestDTO.getEnvConfigMap().isEmpty()) {
             sb.append("EnvConfigMap is null");
         }
         return sb.toString();

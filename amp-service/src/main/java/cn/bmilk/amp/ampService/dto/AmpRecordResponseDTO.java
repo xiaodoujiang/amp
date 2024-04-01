@@ -9,6 +9,14 @@ import java.util.Map;
 @Data
 public class AmpRecordResponseDTO {
 
+    private Long id;
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+    /**
+     * amp单号
+     */
     private String ampNo;
     /**
      * 环境列表，','隔开
