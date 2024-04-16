@@ -1,7 +1,7 @@
 package cn.bmilk.amp.ampService.mapper.entity;
 
 import cn.bmilk.amp.ampService.common.AmpStatusEnum;
-import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
+import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,11 +18,15 @@ public class AmpRecordEntity extends BaseEntity {
     /**
      * 环境列表，','隔开
      */
-    private String environmentList;
+    private String environment;
     /**
      * 应用id
      */
     private long applicationId;
+    /**
+     * 应用名称
+     */
+    private String applicationName;
     /**
      * 项目描述
      */
@@ -48,28 +52,25 @@ public class AmpRecordEntity extends BaseEntity {
      */
     private String type;
     /**
-     * 子单
-     */
-    private String childAmpList;
-    /**
      * 推送人员
      */
     private String operator;
 
 
-    public static AmpRecordEntity buildAmpRecordEntity(AmpRecordRequestDTO ampRecordRequestDTO,
-                                                       String ampNo) {
-        AmpRecordEntity result = new AmpRecordEntity();
+    public static AmpRecordEntity build(AmpRecordRequestDTO ampRecordRequestDTO, String ampNo, String env) {
+        AmpRecordEntity ampRecordEntity = new AmpRecordEntity();
 
-        result.setAmpNo(ampNo);
-        result.setEnvironmentList(ampRecordRequestDTO.getEnvironmentList().stream().map(String::valueOf).collect(Collectors.joining(",")));
-        result.setApplicationId(ampRecordRequestDTO.getApplicationId());
-        result.setAmpDesc(ampRecordRequestDTO.getAmpDesc());
-        result.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
-        result.setLaunchDate(ampRecordRequestDTO.getLaunchDate());
-        result.setCreateUser(ampRecordRequestDTO.getCreateUser());
-        result.setStatus(AmpStatusEnum.NEW.name());
-        result.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
-        return result;
+        ampRecordEntity.setAmpNo(ampNo);
+        ampRecordEntity.setEnvironment(env);
+        ampRecordEntity.setApplicationId(ampRecordRequestDTO.getApplicationId());
+        ampRecordEntity.setApplicationName(ampRecordRequestDTO.getApplicationName());
+        ampRecordEntity.setAmpDesc(ampRecordRequestDTO.getAmpDesc());
+        ampRecordEntity.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
+        ampRecordEntity.setLaunchDate(ampRecordRequestDTO.getLaunchDate());
+        ampRecordEntity.setCreateUser(ampRecordRequestDTO.getCreateUser());
+        ampRecordEntity.setStatus(AmpStatusEnum.NEW.name());
+        ampRecordEntity.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
+        ampRecordEntity.setType(ampRecordRequestDTO.getType());
+        return ampRecordEntity;
     }
 }

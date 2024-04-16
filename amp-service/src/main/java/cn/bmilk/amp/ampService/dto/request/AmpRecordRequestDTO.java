@@ -1,5 +1,6 @@
-package cn.bmilk.amp.ampService.dto;
+package cn.bmilk.amp.ampService.dto.request;
 
+import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
 import lombok.Data;
 
 import java.util.Date;
@@ -8,15 +9,23 @@ import java.util.Map;
 
 @Data
 public class AmpRecordRequestDTO {
+    /**
+     * ampNo
+     */
+    private String ampNo;
 
     /**
-     * 环境列表，','隔开
+     * 环境列表
      */
     private List<String> environmentList;
     /**
      * 应用id
      */
     private Long applicationId;
+    /**
+     * 应用名称
+     */
+    private String applicationName;
     /**
      * 项目描述
      */
@@ -35,13 +44,13 @@ public class AmpRecordRequestDTO {
     private String createUser;
 
     /**
-     * 多环境配置是否一致
+     * 类型-CREATE？UPDATE
      */
-    private boolean mulEnvConfigConsistent;
+    private String type;
 
     /**
      * 配置项列表d
      */
-    private Map<String, List<ConfigResponseDTO>> envConfigMap;
+    private Map<String, List<ConfigDetailDTO>> envConfigMap;
 
 }

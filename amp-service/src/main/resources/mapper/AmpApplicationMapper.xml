@@ -10,6 +10,7 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="application_name" property="applicationName"/>
         <result column="application_desc" property="applicationDesc"/>
+        <result column="APPLICATION_TYPE" property="applicationType"/>
         <result column="address_env_key" property="addressEnvKey"/>
         <result column="address_env_value" property="addressEnvValue"/>
         <result column="path_env_key" property="pathEnvKey"/>
@@ -28,6 +29,7 @@
         UNIQUE_TOKEN,
         APPLICATION_NAME,
         APPLICATION_DESC,
+        APPLICATION_TYPE,
         ADDRESS_ENV_KEY,
         ADDRESS_ENV_VALUE,
         PATH_ENV_KEY,
@@ -37,7 +39,7 @@
         OPERATOR
     </sql>
 
-    <insert id="insert" parameterType="">
+    <insert id="insert">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -49,6 +51,7 @@
             UNIQUE_TOKEN,
             APPLICATION_NAME,
             APPLICATION_DESC,
+            APPLICATION_TYPE,
             ADDRESS_ENV_KEY,
             ADDRESS_ENV_VALUE,
             PATH_ENV_KEY,
@@ -64,6 +67,7 @@
             0,
             #{entity.applicationName},
             #{entity.applicationDesc},
+            #{entity.applicationType},
             #{entity.addressEnvKey},
             #{entity.addressEnvValue},
             #{entity.pathEnvKey},

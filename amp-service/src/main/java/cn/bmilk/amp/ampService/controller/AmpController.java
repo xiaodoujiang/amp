@@ -1,8 +1,11 @@
 package cn.bmilk.amp.ampService.controller;
 
-import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
-import cn.bmilk.amp.ampService.dto.AmpRecordResponseDTO;
-import cn.bmilk.amp.ampService.dto.ConfigResponseDTO;
+import cn.bmilk.amp.ampService.common.StatusEnum;
+import cn.bmilk.amp.ampService.dto.request.AmpPushRequestDTO;
+import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
+import cn.bmilk.amp.ampService.dto.response.AmpPushResponseDTO;
+import cn.bmilk.amp.ampService.dto.response.AmpRecordResponseDTO;
+import cn.bmilk.amp.ampService.dto.response.BaseResponseDTO;
 import cn.bmilk.amp.ampService.service.AmpService;
 
 import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
@@ -19,72 +22,65 @@ public class AmpController {
     private AmpService ampService;
 
     @PostMapping("/create")
-    public CommonResp<AmpRecordResponseDTO> createAmp(@RequestBody AmpRecordRequestDTO recordRequestDTO) {
+    public BaseResponseDTO createAmp(@RequestBody AmpRecordRequestDTO recordRequestDTO) {
+        BaseResponseDTO responseDTO = null;
         String verify = verifyCreateAmp(recordRequestDTO);
         if (StringUtils.isNoneBlank(verifyCreateAmp(recordRequestDTO))) {
-            return CommonResp.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
+            return BaseResponseDTO.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
         }
-
-        AmpRecordResponseDTO responseDTO = ampService.createAmp(recordRequestDTO);
-
-        return CommonResp.SUCCESS(responseDTO);
+        try {
+            List<AmpRecordResponseDTO> ampRecordResponseDTOList = ampService.createAmp(recordRequestDTO);
+            responseDTO = BaseResponseDTO.SUCCESS(ampRecordResponseDTOList);
+        } catch (Exception e) {
+            BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
+        }
+        return responseDTO;
     }
 
     @GetMapping("/ampNo")
-    public CommonResp<AmpRecordResponseDTO> queryAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
+    public BaseResponseDTO queryAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
         AmpRecordResponseDTO responseDTO = ampService.queryAmpRecord(ampNo);
-        return CommonResp.SUCCESS(responseDTO);
-    }
-
-    @GetMapping("/list/user")
-    public CommonResp<List<AmpRecordResponseDTO>> queryAmpRecordList(@RequestParam("user") String createUser,
-                                                                     @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
-                                                                     @RequestParam(name = "pageNo",  required = false, defaultValue = "1") int pageNo) {
-        List<AmpRecordResponseDTO> responseDTO = ampService.queryAmpRecordList(createUser, pageSize, pageNo);
-        return CommonResp.SUCCESS(responseDTO);
+        return BaseResponseDTO.SUCCESS(responseDTO);
     }
 
     @GetMapping("/list")
-    public CommonResp<List<AmpRecordResponseDTO>> queryAmpRecordList(@RequestParam(value = "startDate") String startDateStr,
-                                                                     @RequestParam(value = "endDate") String endDateStr){
-        List<AmpRecordResponseDTO> ampRecordResponseDTOList = ampService.queryAmpRecordList(startDateStr, endDateStr);
-        return CommonResp.SUCCESS(ampRecordResponseDTOList);
+    public BaseResponseDTO queryAmpRecordList(@RequestParam(value = "user", required = false) String createUser,
+                                              @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
+                                              @RequestParam(name = "pageNo", required = false, defaultValue = "1") int pageNo) {
+        List<AmpRecordResponseDTO> responseDTO = ampService.queryAmpRecordList(createUser, pageSize, pageNo);
+        return BaseResponseDTO.SUCCESS(responseDTO);
     }
 
-    @GetMapping("/param")
-    public AmpRecordRequestDTO get() {
-        AmpRecordRequestDTO ampRecordRequestDTO = new AmpRecordRequestDTO();
-        ampRecordRequestDTO.setApplicationId(1L);
-        ampRecordRequestDTO.setAmpDesc("测试");
-        ampRecordRequestDTO.setAmpTaskRel("www.test.com");
-        ampRecordRequestDTO.setCreateUser("test");
-        ampRecordRequestDTO.setLaunchDate(new Date());
-        List<String> envList = new ArrayList<>();
-        envList.add("test");
-        envList.add("dev");
-        ampRecordRequestDTO.setEnvironmentList(envList);
-        ampRecordRequestDTO.setMulEnvConfigConsistent(true);
-        Map<String, List<ConfigResponseDTO>> envConfigMap = new HashMap<>();
-        List<ConfigResponseDTO> configResponseDTOList = new ArrayList<>();
-        ConfigResponseDTO configResponseDTO = new ConfigResponseDTO();
-        configResponseDTO.setConfigDesc("db地址");
-        configResponseDTO.setConfigKey("spring.datasource.url");
-        configResponseDTO.setConfigValue("jdbc:mariadb://96.43.92.79:3306/amp?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai");
-        configResponseDTOList.add(configResponseDTO);
-        ConfigResponseDTO configResponseDTO2 = new ConfigResponseDTO();
-        configResponseDTO2.setConfigDesc("db驱动");
-        configResponseDTO2.setConfigKey("spring.datasource.driver-class-name");
-        configResponseDTO2.setConfigValue("org.mariadb.jdbc.Driver");
-        configResponseDTOList.add(configResponseDTO2);
-        ConfigResponseDTO configResponseDTO3 = new ConfigResponseDTO();
-        configResponseDTO3.setConfigDesc("实体类包路径");
-        configResponseDTO3.setConfigKey("mybatis.type-aliases-package");
-        configResponseDTO3.setConfigValue("cn.bmilk.amp.ampService.mapper.entity");
-        configResponseDTOList.add(configResponseDTO3);
-        envConfigMap.put("dev", configResponseDTOList);
-        ampRecordRequestDTO.setEnvConfigMap(envConfigMap);
-        return ampRecordRequestDTO;
+    @PostMapping("/delete")
+    public BaseResponseDTO deleteAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
+        try {
+            ampService.deleteAmpRecord(ampNo);
+            baseResponseDTO.setStatus(StatusEnum.SUCCESS.name());
+            baseResponseDTO.setErrCode(ResponseCodeEnum.SUCCESS.getCode());
+            baseResponseDTO.setErrMsg(ResponseCodeEnum.SUCCESS.getMsg());
+        }catch (Exception e){
+            baseResponseDTO.setStatus(StatusEnum.FAILURE.name());
+            baseResponseDTO.setErrCode(ResponseCodeEnum.SYSTEM_ERROR.getCode());
+            baseResponseDTO.setErrMsg(e.getMessage());
+        }
+        return baseResponseDTO;
+    }
 
+    @PostMapping("/push")
+    public BaseResponseDTO push(@RequestBody AmpPushRequestDTO ampPushRequestDTO){
+        BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
+        try {
+            String verify = verifyPush(ampPushRequestDTO);
+            if(StringUtils.isBlank(verify)){
+                return BaseResponseDTO.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
+            }
+            AmpPushResponseDTO ampPushResponseDTO = ampService.recordPush(ampPushRequestDTO);
+            baseResponseDTO = BaseResponseDTO.SUCCESS(ampPushResponseDTO);
+        }catch (Exception e){
+            baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
+        }
+        return baseResponseDTO;
 
     }
 
@@ -105,6 +101,22 @@ public class AmpController {
         }
         if (null == recordRequestDTO.getEnvConfigMap() || recordRequestDTO.getEnvConfigMap().isEmpty()) {
             sb.append("EnvConfigMap is null");
+        }
+        if (recordRequestDTO.getEnvironmentList().size() != recordRequestDTO.getEnvConfigMap().size()) {
+            sb.append("env and envConfig not match");
+        }
+        for (String env : recordRequestDTO.getEnvironmentList()) {
+            if (!recordRequestDTO.getEnvConfigMap().containsKey(env)) {
+                sb.append("env and envConfig not match");
+            }
+        }
+        return sb.toString();
+    }
+
+    private String verifyPush(AmpPushRequestDTO ampPushRequestDTO){
+        StringBuilder sb = new StringBuilder();
+        if(StringUtils.isBlank(ampPushRequestDTO.getAmpNo())){
+            sb.append("ampNo is null;");
         }
         return sb.toString();
     }

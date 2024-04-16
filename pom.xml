@@ -25,7 +25,7 @@
         <lombok.version>1.18.24</lombok.version>
         <mybaits.version>2.3.1</mybaits.version>
         <bmilk.common.version>1.0-SNAPSHOT</bmilk.common.version>
-        <jdbc.mariadb.version>3.1.4</jdbc.mariadb.version>
+        <jdbc.mysql.version>8.0.23</jdbc.mysql.version>
         <apache.common-lang3.version>3.13.0</apache.common-lang3.version>
         <bmilk.tools.version>1.0-SNAPSHOT</bmilk.tools.version>
         <snakeyaml.version>2.2</snakeyaml.version>
@@ -83,9 +83,9 @@
                 <version>${bmilk.common.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mariadb.jdbc</groupId>
-                <artifactId>mariadb-java-client</artifactId>
-                <version>${jdbc.mariadb.version}</version>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${jdbc.mysql.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
             <dependency>

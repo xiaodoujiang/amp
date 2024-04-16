@@ -1,5 +1,7 @@
-package cn.bmilk.amp.ampService.dto;
+package cn.bmilk.amp.ampService.dto.response;
 
+import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
+import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,14 +20,19 @@ public class AmpRecordResponseDTO {
      * amp单号
      */
     private String ampNo;
+
     /**
-     * 环境列表，','隔开
+     * 环境
      */
-    private List<String> environmentList;
+    private String environment;
     /**
      * 应用id
      */
     private Long applicationId;
+    /**
+     * 应用名称
+     */
+    private String applicationName;
     /**
      * 项目描述
      */
@@ -43,10 +50,10 @@ public class AmpRecordResponseDTO {
      * amp单状态
      * @see cn.bmilk.amp.ampService.common.AmpStatusEnum
      */
-    private String status;
+    private String ampStatus;
 
     /**
      * 配置项列表d
      */
-    private Map<String, List<ConfigResponseDTO>> envConfigMap;
+    private List<ConfigDetailDTO> configDetailDTOList;
 }

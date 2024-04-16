@@ -1,4 +1,4 @@
-package cn.bmilk.amp.ampService.dto;
+package cn.bmilk.amp.ampService.dto.response;
 
 import cn.bmilk.amp.ampService.mapper.entity.AmpApplicationEntity;
 import lombok.Data;

@@ -18,6 +18,12 @@ public interface AmpRecordMapper {
     void insert(@Param("entity") AmpRecordEntity ampRecordEntity);
 
     /**
+     * 批量插入
+     * @param ampRecordEntityList
+     */
+    void batchInsert(@Param("entityList") List<AmpRecordEntity> ampRecordEntityList);
+
+    /**
      * 根据amp单号查询amp详情
      *
      * @param ampNo amp单号
@@ -36,5 +42,18 @@ public interface AmpRecordMapper {
     List<AmpRecordEntity> queryAmpRecordList(@Param("createUser") String createUser,
                                              @Param("offset") int offset,
                                              @Param("count") int count);
+
+    /**
+     * 删除amp记录
+     * @param ampNo
+     */
+    void deleteAmpRecord(@Param("ampNo") String ampNo);
+
+    /**
+     * 更新推送单状态
+     */
+    int updateStatus(@Param("ampNo") String ampNo,
+                     @Param("newStatus") String newStatus,
+                     @Param("oldStatus") String oldStatus);
 
 }

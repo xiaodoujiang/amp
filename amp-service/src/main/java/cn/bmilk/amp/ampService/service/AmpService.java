@@ -1,16 +1,26 @@
 package cn.bmilk.amp.ampService.service;
 
-import cn.bmilk.amp.ampService.dto.AmpRecordRequestDTO;
-import cn.bmilk.amp.ampService.dto.AmpRecordResponseDTO;
-import cn.bmilk.amp.ampService.dto.ConfigResponseDTO;
+import cn.bmilk.amp.ampService.dto.ConfigPushDetailDTO;
+import cn.bmilk.amp.ampService.dto.request.AmpPushRequestDTO;
+import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
+import cn.bmilk.amp.ampService.dto.response.AmpPushResponseDTO;
+import cn.bmilk.amp.ampService.dto.response.AmpRecordResponseDTO;
+import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
+import cn.bmilk.amp.ampService.mapper.AmpAppColonyRelMapper;
 import cn.bmilk.amp.ampService.mapper.AmpConfigItemTmpMapper;
 import cn.bmilk.amp.ampService.mapper.AmpRecordMapper;
+import cn.bmilk.amp.ampService.mapper.entity.AmpAppEnvRelEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
+import cn.bmilk.amp.ampService.mapper.entity.AmpPushRecordEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
+import cn.bmilk.amp.ampService.task.ConfigPushTask;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AmpService {
@@ -24,27 +34,38 @@ public class AmpService {
     @Resource
     private AmpConfigItemTmpMapper ampConfigItemTmpMapper;
 
-    public AmpRecordResponseDTO createAmp(AmpRecordRequestDTO ampRecordRequestDTO) {
-        if (ampRecordRequestDTO.isMulEnvConfigConsistent()) {
-            if (ampRecordRequestDTO.getEnvConfigMap().size() > 1) {
-                throw new IllegalArgumentException("too many env config, MulEnvConfigConsistent");
-            }
-        } else {
+    @Resource
+    private AmpAppColonyRelMapper ampAppColonyRelMapper;
 
-            if (ampRecordRequestDTO.getEnvironmentList().size() != ampRecordRequestDTO.getEnvConfigMap().size()) {
-                throw new IllegalArgumentException("env and envConfig not match");
-            }
-            for (String env : ampRecordRequestDTO.getEnvironmentList()) {
-                if (!ampRecordRequestDTO.getEnvConfigMap().containsKey(env)) {
-                    throw new IllegalArgumentException("env and envConfig not match");
-                }
+    @Resource
+    private ThreadPoolTaskExecutor pushConfigExecutor;
+
+    @Transactional
+    public List<AmpRecordResponseDTO> createAmp(AmpRecordRequestDTO requestDTO) {
+
+        List<AmpRecordEntity> ampRecordEntityList = new ArrayList<>();
+        List<AmpConfigItemTmpEntity> ampConfigItemTmpEntityList = new ArrayList<>();
+        for (String env : requestDTO.getEnvironmentList()) {
+            // todo 生成amp单号
+            String ampNo = "AMP_" + System.currentTimeMillis() + env;
+
+            AmpRecordEntity ampRecordEntity = AmpRecordEntity.build(requestDTO, ampNo, env);
+
+            ampRecordEntityList.add(ampRecordEntity);
+            List<ConfigDetailDTO> configDetailDTOList = requestDTO.getEnvConfigMap().get(env);
+            for (ConfigDetailDTO configDetailDTO : configDetailDTOList) {
+                AmpConfigItemTmpEntity ampConfigItemTmpEntity = AmpConfigItemTmpEntity.build(configDetailDTO, ampNo);
+                ampConfigItemTmpEntityList.add(ampConfigItemTmpEntity);
             }
         }
-        String ampNo = "AMP_" + System.currentTimeMillis();
-        ampTransactionalService.createAmp(ampRecordRequestDTO, ampNo);
-        AmpRecordResponseDTO ampRecordResponseDTO = new AmpRecordResponseDTO();
-        ampRecordResponseDTO.setAmpNo(ampNo);
-        return ampRecordResponseDTO;
+        ampTransactionalService.createAmp(ampRecordEntityList, ampConfigItemTmpEntityList);
+        List<AmpRecordResponseDTO> ampRecordResponseDTOList = new ArrayList<>();
+        for (AmpRecordEntity ampRecordEntity : ampRecordEntityList) {
+            AmpRecordResponseDTO ampRecordResponseDTO = new AmpRecordResponseDTO();
+            ampRecordResponseDTO.setAmpNo(ampRecordEntity.getAmpNo());
+            ampRecordResponseDTOList.add(ampRecordResponseDTO);
+        }
+        return ampRecordResponseDTOList;
     }
 
     public AmpRecordResponseDTO queryAmpRecord(String ampNo) {
@@ -53,16 +74,46 @@ public class AmpService {
             return new AmpRecordResponseDTO();
         }
         List<AmpConfigItemTmpEntity> configItemList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
-        return buildAmpRecordResponseDTO(ampRecordEntity, configItemList);
+        AmpRecordResponseDTO ampRecordResponseDTO = buildAmpRecordResponseDTO(ampRecordEntity, configItemList);
+        return ampRecordResponseDTO;
     }
 
-    public List<AmpRecordResponseDTO>  queryAmpRecordList(String createUser, int pageSize, int pageNo) {
+    public List<AmpRecordResponseDTO> queryAmpRecordList(String createUser, int pageSize, int pageNo) {
         List<AmpRecordEntity> ampRecordEntityList = ampRecordMapper.queryAmpRecordList(createUser, (pageNo - 1) * pageSize, pageSize);
         List<AmpRecordResponseDTO> result = new ArrayList<>();
         for (AmpRecordEntity ampRecordEntity : ampRecordEntityList) {
             result.add(buildAmpRecordResponseDTO(ampRecordEntity, null));
         }
         return result;
+    }
+
+    public void deleteAmpRecord(String ampNo) {
+        ampTransactionalService.deleteAmp(ampNo);
+    }
+
+
+    public AmpPushResponseDTO recordPush(AmpPushRequestDTO ampPushRequestDTO) {
+        String ampNo = ampPushRequestDTO.getAmpNo();
+        List<String> colonyList = ampPushRequestDTO.getColonyList();
+        // 查询amp单详情
+        AmpRecordEntity ampRecordEntity = ampRecordMapper.queryAmpRecord(ampNo);
+        // 查询应用部署的集群(如果没有传推送集群列表推送全部集群)
+        if (null == colonyList || colonyList.isEmpty()) {
+            List<AmpAppEnvRelEntity> ampAppEnvRelEntitieList = ampAppColonyRelMapper.queryByApp(ampRecordEntity.getApplicationName());
+            colonyList = ampAppEnvRelEntitieList.stream().map(AmpAppEnvRelEntity::getAppName).collect(Collectors.toList());
+        }
+        // 查询需要推送的配置项
+        List<AmpConfigItemTmpEntity> ampConfigItemTmpEntityList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
+        // 生成推送记录单
+        List<AmpPushRecordEntity> ampPushRecordEntitieList = ampTransactionalService.recordPush(ampRecordEntity, colonyList, ampConfigItemTmpEntityList);
+        List<ConfigPushDetailDTO> configPushDetailDTOList = new ArrayList<>();
+        for (AmpPushRecordEntity ampPushRecordEntity : ampPushRecordEntitieList) {
+            pushConfigExecutor.execute(new ConfigPushTask(ampPushRecordEntity.getId()));
+            configPushDetailDTOList.add(ConfigPushDetailDTO.build(ampPushRecordEntity));
+        }
+        AmpPushResponseDTO ampPushResponseDTO = AmpPushResponseDTO.build(ampRecordEntity);
+        ampPushResponseDTO.setConfigPushDetailDTOList(configPushDetailDTOList);
+        return ampPushResponseDTO;
     }
 
     private AmpRecordResponseDTO buildAmpRecordResponseDTO(AmpRecordEntity ampRecordEntity,
@@ -75,23 +126,20 @@ public class AmpService {
         result.setAmpDesc(ampRecordEntity.getAmpDesc());
         result.setAmpTaskRel(ampRecordEntity.getAmpTaskRel());
         result.setApplicationId(ampRecordEntity.getApplicationId());
-        result.setEnvironmentList(Arrays.asList(ampRecordEntity.getEnvironmentList().split(",")));
-        result.setStatus(ampRecordEntity.getStatus());
-        result.setEnvConfigMap(buildEnvConfigMap(configItemList));
+        result.setApplicationName(ampRecordEntity.getApplicationName());
+        result.setEnvironment(ampRecordEntity.getEnvironment());
+        result.setAmpStatus(ampRecordEntity.getStatus());
+        result.setAmpDesc(ampRecordEntity.getAmpDesc());
+        result.setLaunchDate(ampRecordEntity.getLaunchDate());
+        result.setConfigDetailDTOList(buildEnvConfigList(configItemList));
         return result;
     }
 
-    private Map<String, List<ConfigResponseDTO>> buildEnvConfigMap(List<AmpConfigItemTmpEntity> configItemList) {
+    private List<ConfigDetailDTO> buildEnvConfigList(List<AmpConfigItemTmpEntity> configItemList) {
         if (null == configItemList) return null;
-        Map<String, List<ConfigResponseDTO>> result = new HashMap<>();
+        List<ConfigDetailDTO> result = new ArrayList<>();
         for (AmpConfigItemTmpEntity ampConfigItemTmpEntity : configItemList) {
-            if (result.containsKey(ampConfigItemTmpEntity.getEnvironmentName())) {
-                result.get(ampConfigItemTmpEntity.getEnvironmentName()).add(new ConfigResponseDTO(ampConfigItemTmpEntity));
-            } else {
-                List<ConfigResponseDTO> configResponseDTOList = new ArrayList<>();
-                configResponseDTOList.add(new ConfigResponseDTO(ampConfigItemTmpEntity));
-                result.put(ampConfigItemTmpEntity.getEnvironmentName(), configResponseDTOList);
-            }
+            result.add(new ConfigDetailDTO(ampConfigItemTmpEntity));
         }
         return result;
     }

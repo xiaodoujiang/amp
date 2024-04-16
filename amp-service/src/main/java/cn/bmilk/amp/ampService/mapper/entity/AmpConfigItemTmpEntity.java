@@ -1,7 +1,10 @@
 package cn.bmilk.amp.ampService.mapper.entity;
 
+import cn.bmilk.amp.ampService.common.ConfigTypeEnum;
+import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -26,8 +29,15 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
      * 描述
      */
     private String configDesc;
-    /**
-     * 环境名称
-     */
-    private String environmentName;
+
+    public static AmpConfigItemTmpEntity build(ConfigDetailDTO configDetailDTO, String ampNo){
+        AmpConfigItemTmpEntity ampConfigItemTmpEntity = new AmpConfigItemTmpEntity();
+        ampConfigItemTmpEntity.setAmpNo(ampNo);
+        String configType = StringUtils.isBlank(configDetailDTO.getConfigType()) ? ConfigTypeEnum.NORMAL_CONFIG.name() : configDetailDTO.getConfigType();
+        ampConfigItemTmpEntity.setConfigType(configType);
+        ampConfigItemTmpEntity.setConfigKey(configDetailDTO.getConfigKey());
+        ampConfigItemTmpEntity.setConfigValue(configDetailDTO.getConfigValue());
+        ampConfigItemTmpEntity.setConfigDesc(configDetailDTO.getConfigValue());
+        return ampConfigItemTmpEntity;
+    }
 }

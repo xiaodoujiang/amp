@@ -4,6 +4,8 @@ import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface AmpConfigItemMapper {
 
@@ -12,6 +14,12 @@ public interface AmpConfigItemMapper {
      * @param ampConfigItemEntity
      */
     void insert(@Param("entity") AmpConfigItemEntity ampConfigItemEntity);
+
+    /**
+     * 批量插入
+     * @param ampConfigItemEntityList
+     */
+    void batchInset(@Param("entityList")List<AmpConfigItemEntity> ampConfigItemEntityList);
 
 
 }

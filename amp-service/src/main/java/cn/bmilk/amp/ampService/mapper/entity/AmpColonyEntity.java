@@ -14,4 +14,8 @@ public class AmpColonyEntity extends BaseEntity {
      * 环境描述
      */
     private String colonyDesc;
+    /**
+     * 所属环境
+     */
+    private String environment;
 }

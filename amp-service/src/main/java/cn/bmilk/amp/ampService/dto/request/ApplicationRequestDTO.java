@@ -1,4 +1,4 @@
-package cn.bmilk.amp.ampService.dto;
+package cn.bmilk.amp.ampService.dto.request;
 
 import lombok.Data;
 

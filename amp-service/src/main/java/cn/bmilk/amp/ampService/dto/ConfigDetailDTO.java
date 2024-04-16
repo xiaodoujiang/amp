@@ -4,7 +4,7 @@ import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
 import lombok.Data;
 
 @Data
-public class ConfigResponseDTO {
+public class ConfigDetailDTO {
 
     /**
      * 配置项key
@@ -24,24 +24,14 @@ public class ConfigResponseDTO {
      */
     private String configDesc;
 
-    /**
-     * 更新类型
-     */
-    private String updateType;
-    /**
-     * 环境名称
-     */
-    private String environmentName;
 
-    public ConfigResponseDTO() {
+    public ConfigDetailDTO() {
     }
 
-    public ConfigResponseDTO(AmpConfigItemTmpEntity ampConfigItemTmpEntity){
+    public ConfigDetailDTO(AmpConfigItemTmpEntity ampConfigItemTmpEntity){
         this.configKey = ampConfigItemTmpEntity.getConfigKey();
         this.configValue=ampConfigItemTmpEntity.getConfigValue();
         this.configType= ampConfigItemTmpEntity.getConfigType();
         this.configDesc = ampConfigItemTmpEntity.getConfigDesc();
-        this.updateType = ampConfigItemTmpEntity.getUpdateType();
-        this.environmentName = ampConfigItemTmpEntity.getEnvironmentName();
     }
 }

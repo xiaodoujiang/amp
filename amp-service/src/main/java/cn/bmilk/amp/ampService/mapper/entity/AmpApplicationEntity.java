@@ -15,6 +15,10 @@ public class AmpApplicationEntity extends BaseEntity {
      */
     private String applicationDesc;
     /**
+     * 应用类型
+     */
+    private String applicationType;
+    /**
      * 应用请求地址KEY
      */
     private String addressEnvKey;

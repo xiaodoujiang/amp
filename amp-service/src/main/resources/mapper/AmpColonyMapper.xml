@@ -12,6 +12,7 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="colony_name" property="colonyName"/>
         <result column="colony_desc" property="colonyDesc"/>
+        <result column="environment" property="environment"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -22,7 +23,8 @@
         UPDATE_AT,
         UNIQUE_TOKEN,
         COLONY_NAME,
-        COLONY_DESC
+        COLONY_DESC,
+        ENVIRONMENT
     </sql>
 
     <insert id="insert">
@@ -36,7 +38,8 @@
             UPDATE_AT,
             UNIQUE_TOKEN,
             COLONY_NAME,
-            COLONY_DESC
+            COLONY_DESC,
+            ENVIRONMENT
         ) VALUE(
             NOW(),
             NOW(),
@@ -44,7 +47,8 @@
             'SYS',
             0,
             #{entity.colonyName},
-            #{entity.colonyDesc}
+            #{entity.colonyDesc},
+            #{entity.environment}
         )
     </insert>
 </mapper>

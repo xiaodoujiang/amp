@@ -20,4 +20,11 @@ public interface AmpConfigItemTmpMapper {
      * @return {@link AmpConfigItemTmpEntity}
      */
     List<AmpConfigItemTmpEntity> queryConfigListByAmpNo(@Param("ampNo") String ampNo);
+
+    /**
+     * 删除配置项根据ampNo
+     * @param ampNo
+     */
+    void deleteConfigByAmpNo(@Param("ampNo") String ampNo);
+
 }
