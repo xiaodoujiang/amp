@@ -32,7 +32,7 @@ public class AmpController {
             List<AmpRecordResponseDTO> ampRecordResponseDTOList = ampService.createAmp(recordRequestDTO);
             responseDTO = BaseResponseDTO.SUCCESS(ampRecordResponseDTOList);
         } catch (Exception e) {
-            BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
+            responseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
         return responseDTO;
     }
