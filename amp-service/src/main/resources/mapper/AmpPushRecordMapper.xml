@@ -15,6 +15,8 @@
         <result column="environment" property="environment"/>
         <result column="application_name" property="applicationName"/>
         <result column="push_status" property="pushStatus"/>
+        <result column="err_code" property="errCode"/>
+        <result column="err_msg" property="errMsg"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -46,7 +48,9 @@
             COLONY_NAME,
             ENVIRONMENT,
             APPLICATION_NAME,
-            PUSH_STATUS
+            PUSH_STATUS,
+            ERR_CODE,
+            ERR_MSG
         ) VALUE(
             NOW(),
             NOW(),
@@ -57,7 +61,9 @@
             #{entity.colonyName},
             #{entity.environment},
             #{entity.applicationName},
-            #{entity.pushStatus}
+            #{entity.pushStatus},
+            #{entity.errCode},
+            #{entity.errMsg}
         )
     </insert>
 
@@ -72,7 +78,9 @@
             COLONY_NAME,
             ENVIRONMENT,
             APPLICATION_NAME,
-            PUSH_STATUS
+            PUSH_STATUS,
+            ERR_CODE,
+            ERR_MSG
         ) VALUE
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
@@ -85,9 +93,17 @@
                 #{entity.colonyName},
                 #{entity.environment},
                 #{entity.applicationName},
-                #{entity.pushStatus}
+                #{entity.pushStatus},
+                #{entity.errCode},
+                #{entity.errMsg}
             )
         </foreach>
     </insert>
+
+    <update id="updateStatus" >
+        UPDATE AMP_PUSH_RECORD
+        SET PUSH_STATUS = #{newStatus}, err_code = #{errCode}, err_msg = #{errMsg}
+        WHERE id = #{id} and PUSH_STATUS = #{oldStatus} and UNIQUE_TOKEN = 0
+    </update>
 
 </mapper>

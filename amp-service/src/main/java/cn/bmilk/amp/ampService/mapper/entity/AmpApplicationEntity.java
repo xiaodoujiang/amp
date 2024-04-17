@@ -15,10 +15,6 @@ public class AmpApplicationEntity extends BaseEntity {
      */
     private String applicationDesc;
     /**
-     * 应用类型
-     */
-    private String applicationType;
-    /**
      * 应用请求地址KEY
      */
     private String addressEnvKey;
@@ -35,9 +31,17 @@ public class AmpApplicationEntity extends BaseEntity {
      */
     private String pathEnvValue;
     /**
+     * 配置文件类型
+     */
+    private String configFileType;
+    /**
      * 使用的配置中心类型
      */
-    private String configCenterType;
+    private String configCenterApp;
+    /**
+     * 配置分组
+     */
+    private String configGroup;
     /**
      * 配置中心租户
      */

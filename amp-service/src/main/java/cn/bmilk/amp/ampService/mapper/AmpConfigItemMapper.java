@@ -21,5 +21,12 @@ public interface AmpConfigItemMapper {
      */
     void batchInset(@Param("entityList")List<AmpConfigItemEntity> ampConfigItemEntityList);
 
+    /**
+     * 查询指定应用的所有配置项
+     * @param appName
+     * @return
+     */
+    List<AmpConfigItemEntity> queryByAppName(@Param("appName")String appName);
+
 
 }

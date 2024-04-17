@@ -21,5 +21,12 @@ public interface AmpApplicationMapper {
      */
     List<AmpApplicationEntity> queryAllApplication();
 
+    /**
+     * 查询应用详情
+     * @param appName
+     * @return
+     */
+    AmpApplicationEntity queryApplicationByName(@Param("appName") String appName);
+
 
 }

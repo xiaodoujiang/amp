@@ -1,6 +1,6 @@
 package cn.bmilk.amp.ampService.mapper;
 
-import cn.bmilk.amp.ampService.mapper.entity.AmpAppEnvRelEntity;
+import cn.bmilk.amp.ampService.mapper.entity.AmpAppColonyRelEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,14 +11,23 @@ public interface AmpAppColonyRelMapper {
 
     /**
      * 插入应用环境关联关系
-     * @param ampAppEnvRelEntity
+     * @param ampAppColonyRelEntity
      */
-    void insert(@Param("entity")AmpAppEnvRelEntity ampAppEnvRelEntity);
+    void insert(@Param("entity") AmpAppColonyRelEntity ampAppColonyRelEntity);
 
     /**
      * 根据app名称查询集群绑定关系
      * @param appName
      * @return
      */
-    List<AmpAppEnvRelEntity> queryByApp(@Param("entity") String appName);
+    List<AmpAppColonyRelEntity> queryByApp(@Param("entity") String appName);
+
+    /**
+     * 查询app和
+     * @param appName
+     * @param colonyName
+     * @return
+     */
+    AmpAppColonyRelEntity queryByAppAndColony(@Param("appName")String appName,
+                                              @Param("colonyName") String colonyName);
 }

@@ -21,7 +21,6 @@ public class ParamTest {
         ampRecordRequestDTO.setAmpTaskRel("https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.32");
         ampRecordRequestDTO.setCreateUser("bmilk");
         ampRecordRequestDTO.setLaunchDate(new Date());
-        ampRecordRequestDTO.setMulEnvConfigConsistent(true);
         Map<String, List<ConfigDetailDTO>> envConfigMap = new HashMap<>();
         List<ConfigDetailDTO> list = new ArrayList<>();
         for (int i =0; i<5 ;i++){

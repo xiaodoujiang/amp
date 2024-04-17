@@ -5,11 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
-import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PushConfigurationDTO extends BaseRequestDTO{
+public class PushConfigurationRequestDTO extends BaseRequestDTO{
 
     // 流水号
     private String serialNo;

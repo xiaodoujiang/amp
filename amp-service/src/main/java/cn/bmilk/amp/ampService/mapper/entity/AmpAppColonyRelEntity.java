@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AmpAppEnvRelEntity extends BaseEntity {
+public class AmpAppColonyRelEntity extends BaseEntity {
     /**
      * 应用名称
      */

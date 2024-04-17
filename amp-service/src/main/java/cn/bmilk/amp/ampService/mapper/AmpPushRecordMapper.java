@@ -36,4 +36,19 @@ public interface AmpPushRecordMapper {
      * @return
      */
     AmpPushRecordEntity queryById(@Param("id") long id);
+
+    /**
+     * 更新推送状态
+     * @param id 行id
+     * @param oldStatus 老状态
+     * @param newStatus 新状态
+     * @param errCode 错误码
+     * @param errMsg 错误描述
+     * @return 更新数量
+     */
+    int updateStatus(@Param("id") long id,
+                     @Param("oldStatus") String oldStatus,
+                     @Param("newStatus") String newStatus,
+                     @Param("errCode") String errCode,
+                     @Param("errMsg") String errMsg);
 }

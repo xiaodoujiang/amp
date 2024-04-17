@@ -1,13 +1,12 @@
 package cn.bmilk.amp.nacosgw.service;
 
 import cn.bmilk.amp.gwcommon.common.StatusEnum;
-import cn.bmilk.amp.gwcommon.request.PushConfigurationDTO;
+import cn.bmilk.amp.gwcommon.request.PushConfigurationRequestDTO;
 import cn.bmilk.amp.gwcommon.response.BaseResponseDTO;
 import cn.bmilk.amp.gwcommon.response.PushConfigResponseDTO;
 import cn.bmilk.amp.nacosgw.config.RequestURIEnum;
 import cn.bmilk.amp.nacosgw.remote.NacosBaseResponseDTO;
 import cn.bmilk.amp.nacosgw.service.config.ConfigureItemService;
-import cn.bmilk.amp.nacosgw.utils.PropertiesUtils;
 import cn.bmilk.tools.http.BaseJerseyFacade;
 import cn.bmilk.tools.utils.GsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +17,9 @@ import javax.ws.rs.core.GenericType;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Service("PUSH_CONFIGURATION")
-public class PushConfigService extends AbstractGwService<PushConfigurationDTO> {
+public class PushConfigService extends AbstractGwService<PushConfigurationRequestDTO> {
 
     @Resource(name = "nacosJerseyFacade")
     private BaseJerseyFacade nacosJersey;
@@ -30,16 +28,16 @@ public class PushConfigService extends AbstractGwService<PushConfigurationDTO> {
     private Map<String, ConfigureItemService> configureItemServiceMap;
 
     @Override
-    protected PushConfigurationDTO parseBusinessRequestDTO(String requestDTOJson) {
-        PushConfigurationDTO pushConfigurationDTO = GsonUtils.fromJson(requestDTOJson, PushConfigurationDTO.class);
-        if (null == pushConfigurationDTO) {
-            pushConfigurationDTO = new PushConfigurationDTO();
+    protected PushConfigurationRequestDTO parseBusinessRequestDTO(String requestDTOJson) {
+        PushConfigurationRequestDTO pushConfigurationRequestDTO = GsonUtils.fromJson(requestDTOJson, PushConfigurationRequestDTO.class);
+        if (null == pushConfigurationRequestDTO) {
+            pushConfigurationRequestDTO = new PushConfigurationRequestDTO();
         }
-        return pushConfigurationDTO;
+        return pushConfigurationRequestDTO;
     }
 
     @Override
-    protected BaseResponseDTO doTransaction(PushConfigurationDTO requestDTO) {
+    protected BaseResponseDTO doTransaction(PushConfigurationRequestDTO requestDTO) {
         String requestUrl = requestDTO.getConfigCenterAddress() + RequestURIEnum.PUSH_CONFIG.getUri();
         GenericType<NacosBaseResponseDTO<Boolean>> type = new GenericType<NacosBaseResponseDTO<Boolean>>() {
         };
@@ -48,7 +46,7 @@ public class PushConfigService extends AbstractGwService<PushConfigurationDTO> {
     }
 
 
-    private Map<String, String> buildRemoteRequestDTO(PushConfigurationDTO requestDTO) {
+    private Map<String, String> buildRemoteRequestDTO(PushConfigurationRequestDTO requestDTO) {
         Map<String, String> pushConfigMap = new HashMap<>();
         pushConfigMap.put("dataId", requestDTO.getServerName() + "-" + requestDTO.getEnv() + "." + requestDTO.getFileType());
         pushConfigMap.put("group", requestDTO.getGroup());
@@ -59,12 +57,12 @@ public class PushConfigService extends AbstractGwService<PushConfigurationDTO> {
         return pushConfigMap;
     }
 
-    private String buildContent(PushConfigurationDTO requestDTO) {
+    private String buildContent(PushConfigurationRequestDTO requestDTO) {
         return configureItemServiceMap.get(requestDTO.getFileType()).toString(requestDTO.getConfigurationDTOList());
     }
 
     private PushConfigResponseDTO buildResponseDTO(NacosBaseResponseDTO<Boolean> pushResponse,
-                                                   PushConfigurationDTO requestDTO) {
+                                                   PushConfigurationRequestDTO requestDTO) {
         PushConfigResponseDTO pushConfigResponseDTO = new PushConfigResponseDTO();
         StatusEnum pushStatus = pushResponse.isSuccess() && pushResponse.getData() ? StatusEnum.SUCCESS : StatusEnum.FAILURE;
         pushConfigResponseDTO.setStatus(pushStatus.name());
@@ -75,7 +73,7 @@ public class PushConfigService extends AbstractGwService<PushConfigurationDTO> {
 
 
     @Override
-    protected String paramValid(PushConfigurationDTO requestDTO) {
+    protected String paramValid(PushConfigurationRequestDTO requestDTO) {
         StringBuilder sb = new StringBuilder();
 
         if (StringUtils.isBlank(requestDTO.getSerialNo())) {

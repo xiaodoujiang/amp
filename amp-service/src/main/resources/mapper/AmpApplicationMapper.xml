@@ -10,12 +10,13 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="application_name" property="applicationName"/>
         <result column="application_desc" property="applicationDesc"/>
-        <result column="APPLICATION_TYPE" property="applicationType"/>
         <result column="address_env_key" property="addressEnvKey"/>
         <result column="address_env_value" property="addressEnvValue"/>
         <result column="path_env_key" property="pathEnvKey"/>
         <result column="path_env_value" property="pathEnvValue"/>
-        <result column="config_center_type" property="configCenterType"/>
+        <result column="config_file_type" property="configFileType"/>
+        <result column="config_center_app" property="configCenterApp"/>
+        <result column="config_group" property="configGroup"/>
         <result column="config_tenant" property="configTenant"/>
         <result column="operator" property="operator"/>
     </resultMap>
@@ -29,12 +30,13 @@
         UNIQUE_TOKEN,
         APPLICATION_NAME,
         APPLICATION_DESC,
-        APPLICATION_TYPE,
         ADDRESS_ENV_KEY,
         ADDRESS_ENV_VALUE,
         PATH_ENV_KEY,
         PATH_ENV_VALUE,
-        CONFIG_CENTER_TYPE,
+        CONFIG_FILE_TYPE,
+        CONFIG_CENTER_APP,
+        CONFIG_GROUP,
         CONFIG_TENANT,
         OPERATOR
     </sql>
@@ -51,12 +53,13 @@
             UNIQUE_TOKEN,
             APPLICATION_NAME,
             APPLICATION_DESC,
-            APPLICATION_TYPE,
             ADDRESS_ENV_KEY,
             ADDRESS_ENV_VALUE,
             PATH_ENV_KEY,
             PATH_ENV_VALUE,
-            CONFIG_CENTER_TYPE,
+            CONFIG_FILE_TYPE,
+            CONFIG_CENTER_APP,
+            CONFIG_GROUP,
             CONFIG_TENANT,
             OPERATOR
         ) VALUE(
@@ -67,22 +70,30 @@
             0,
             #{entity.applicationName},
             #{entity.applicationDesc},
-            #{entity.applicationType},
             #{entity.addressEnvKey},
             #{entity.addressEnvValue},
             #{entity.pathEnvKey},
             #{entity.pathEnvValue},
-            #{entity.configCenterType},
+            #{entity.configFileType},
+            #{entity.configCenterApp},
+            #{entity.configGroup},
             #{entity.configTenant},
             #{entity.operator}
         )
     </insert>
 
-    <select id="queryAllApplication" resultMap="AmpApplicationEntity">
+    <select id="queryAllApplication" resultMap="java.util.List">
         select
             <include refid="Base_column_list"/>
         from AMP_APPLICATION
         where UNIQUE_TOKEN = 0
+    </select>
+
+    <select id="queryByAppName" resultMap="AmpApplicationEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_APPLICATION
+        where UNIQUE_TOKEN = 0 and APPLICATION_NAME = #{appName}
     </select>
 
 </mapper>

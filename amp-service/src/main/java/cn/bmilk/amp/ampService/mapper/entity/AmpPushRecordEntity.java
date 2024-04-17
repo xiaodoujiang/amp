@@ -27,4 +27,16 @@ public class AmpPushRecordEntity extends BaseEntity{
      * 推送状态
      */
     private String pushStatus;
+    /**
+     * 流水号
+     */
+    private String serialNo;
+    /**
+     * 状态码
+     */
+    private String errCode;
+    /**
+     * 状态描述
+     */
+    private String errMsg;
 }

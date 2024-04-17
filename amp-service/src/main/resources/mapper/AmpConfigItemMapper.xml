@@ -102,4 +102,12 @@
 
     </insert>
 
+    <select id="queryByAppName" resultType="java.util.List">
+        select
+            <include refid="Base_column_list"/>
+        from AMP_CONFIG_ITEM
+        where APPLICATION_NAME = #{appName}
+        and UNIQUE_TOKEN = 0
+    </select>
+
 </mapper>

@@ -6,13 +6,8 @@ import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
 import cn.bmilk.amp.ampService.dto.response.AmpPushResponseDTO;
 import cn.bmilk.amp.ampService.dto.response.AmpRecordResponseDTO;
 import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
-import cn.bmilk.amp.ampService.mapper.AmpAppColonyRelMapper;
-import cn.bmilk.amp.ampService.mapper.AmpConfigItemTmpMapper;
-import cn.bmilk.amp.ampService.mapper.AmpRecordMapper;
-import cn.bmilk.amp.ampService.mapper.entity.AmpAppEnvRelEntity;
-import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
-import cn.bmilk.amp.ampService.mapper.entity.AmpPushRecordEntity;
-import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
+import cn.bmilk.amp.ampService.mapper.*;
+import cn.bmilk.amp.ampService.mapper.entity.*;
 import cn.bmilk.amp.ampService.task.ConfigPushTask;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -39,6 +34,14 @@ public class AmpService {
 
     @Resource
     private ThreadPoolTaskExecutor pushConfigExecutor;
+
+    @Resource
+    private Map<String, AmpPushService> ampPushServiceMap;
+
+    @Resource
+    private AmpPushRecordMapper ampPushRecordMapper;
+    @Resource
+    private AmpApplicationMapper ampApplicationMapper;
 
     @Transactional
     public List<AmpRecordResponseDTO> createAmp(AmpRecordRequestDTO requestDTO) {
@@ -99,8 +102,8 @@ public class AmpService {
         AmpRecordEntity ampRecordEntity = ampRecordMapper.queryAmpRecord(ampNo);
         // 查询应用部署的集群(如果没有传推送集群列表推送全部集群)
         if (null == colonyList || colonyList.isEmpty()) {
-            List<AmpAppEnvRelEntity> ampAppEnvRelEntitieList = ampAppColonyRelMapper.queryByApp(ampRecordEntity.getApplicationName());
-            colonyList = ampAppEnvRelEntitieList.stream().map(AmpAppEnvRelEntity::getAppName).collect(Collectors.toList());
+            List<AmpAppColonyRelEntity> ampAppEnvRelEntitieList = ampAppColonyRelMapper.queryByApp(ampRecordEntity.getApplicationName());
+            colonyList = ampAppEnvRelEntitieList.stream().map(AmpAppColonyRelEntity::getAppName).collect(Collectors.toList());
         }
         // 查询需要推送的配置项
         List<AmpConfigItemTmpEntity> ampConfigItemTmpEntityList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
@@ -114,6 +117,17 @@ public class AmpService {
         AmpPushResponseDTO ampPushResponseDTO = AmpPushResponseDTO.build(ampRecordEntity);
         ampPushResponseDTO.setConfigPushDetailDTOList(configPushDetailDTOList);
         return ampPushResponseDTO;
+    }
+
+    public boolean push(long recordId){
+        AmpPushRecordEntity ampPushRecordEntity = ampPushRecordMapper.queryById(recordId);
+        AmpApplicationEntity ampApplicationEntity = ampApplicationMapper.queryApplicationByName(ampPushRecordEntity.getApplicationName());
+        AmpPushService ampPushService = ampPushServiceMap.get(ampApplicationEntity.getApplicationName());
+        if(ampPushService == null){
+            // todo 抛出异常
+            throw new RuntimeException();
+        }
+        return ampPushService.push(ampPushRecordEntity, ampApplicationEntity);
     }
 
     private AmpRecordResponseDTO buildAmpRecordResponseDTO(AmpRecordEntity ampRecordEntity,

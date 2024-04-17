@@ -17,7 +17,7 @@ public class ConfigPushTask implements Runnable{
 
     @Override
     public void run() {
-        
+        ampService.push(id);
     }
 
     @Override

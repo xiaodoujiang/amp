@@ -10,4 +10,10 @@ public class GwRequestDTO {
     // 数据json
     private String requestDataJson;
 
+    public GwRequestDTO(String channel, String businessType, String requestDataJson){
+        this.channel = channel;
+        this.businessType = businessType;
+        this.requestDataJson = requestDataJson;
+    }
+
 }
