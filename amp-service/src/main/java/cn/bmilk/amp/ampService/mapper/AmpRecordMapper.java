@@ -19,6 +19,7 @@ public interface AmpRecordMapper {
 
     /**
      * 批量插入
+     *
      * @param ampRecordEntityList
      */
     void batchInsert(@Param("entityList") List<AmpRecordEntity> ampRecordEntityList);
@@ -35,8 +36,8 @@ public interface AmpRecordMapper {
      * 查询指定用户创建的amp列表
      *
      * @param createUser 用户
-     * @param offset 询偏移量
-     * @param count  查询数量
+     * @param offset     询偏移量
+     * @param count      查询数量
      * @return {@link AmpRecordEntity}
      */
     List<AmpRecordEntity> queryAmpRecordList(@Param("createUser") String createUser,
@@ -45,6 +46,7 @@ public interface AmpRecordMapper {
 
     /**
      * 删除amp记录
+     *
      * @param ampNo
      */
     void deleteAmpRecord(@Param("ampNo") String ampNo);
@@ -52,8 +54,8 @@ public interface AmpRecordMapper {
     /**
      * 更新推送单状态
      */
-    int updateStatus(@Param("ampNo") String ampNo,
-                     @Param("newStatus") String newStatus,
-                     @Param("oldStatus") String oldStatus);
+    int updateStatus(@Param("id") long id,
+                     @Param("oldStatus") String oldStatus,
+                     @Param("newStatus") String newStatus);
 
 }

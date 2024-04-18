@@ -11,4 +11,6 @@ public class LoginResponseDTO extends BaseResponseDTO{
     private String userName;
     // 登录结果token
     private String token;
+
+
 }

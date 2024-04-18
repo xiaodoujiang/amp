@@ -20,7 +20,15 @@ public interface AmpAppColonyRelMapper {
      * @param appName
      * @return
      */
-    List<AmpAppColonyRelEntity> queryByApp(@Param("entity") String appName);
+    List<AmpAppColonyRelEntity> queryByAppName(@Param("appName") String appName);
+
+    /**
+     * 根据app名称查询集群绑定关系
+     * @param appName
+     * @return
+     */
+    List<AmpAppColonyRelEntity> queryByAppNameAndColony(@Param("appName") String appName,
+                                                        @Param("colonyList") List<String> colonyList);
 
     /**
      * 查询app和

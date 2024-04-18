@@ -15,6 +15,7 @@
         <result column="environment" property="environment"/>
         <result column="application_name" property="applicationName"/>
         <result column="push_status" property="pushStatus"/>
+        <result column="serial_no" property="serialNo"/>
         <result column="err_code" property="errCode"/>
         <result column="err_msg" property="errMsg"/>
     </resultMap>
@@ -30,9 +31,11 @@
         COLONY_NAME,
         ENVIRONMENT,
         APPLICATION_NAME,
-        PUSH_STATUS
+        PUSH_STATUS,
+        SERIAL_NO,
+        ERR_CODE,
+        ERR_MSG
     </sql>
-
 
     <insert id="insert">
         <selectKey keyColumn="id" keyProperty="entity.id" resultType="long" order="AFTER">
@@ -49,6 +52,7 @@
             ENVIRONMENT,
             APPLICATION_NAME,
             PUSH_STATUS,
+            SERIAL_NO,
             ERR_CODE,
             ERR_MSG
         ) VALUE(
@@ -62,6 +66,7 @@
             #{entity.environment},
             #{entity.applicationName},
             #{entity.pushStatus},
+            #{entity.serialNo},
             #{entity.errCode},
             #{entity.errMsg}
         )
@@ -79,6 +84,7 @@
             ENVIRONMENT,
             APPLICATION_NAME,
             PUSH_STATUS,
+            SERIAL_NO,
             ERR_CODE,
             ERR_MSG
         ) VALUE
@@ -94,6 +100,7 @@
                 #{entity.environment},
                 #{entity.applicationName},
                 #{entity.pushStatus},
+                #{entity.serialNo},
                 #{entity.errCode},
                 #{entity.errMsg}
             )
@@ -105,5 +112,19 @@
         SET PUSH_STATUS = #{newStatus}, err_code = #{errCode}, err_msg = #{errMsg}
         WHERE id = #{id} and PUSH_STATUS = #{oldStatus} and UNIQUE_TOKEN = 0
     </update>
+
+    <select id="queryByAmpNo" resultMap="AmpColonyEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_PUSH_RECORD
+        where AMP_NO = #{ampNo} and UNIQUE_TOKEN = 0
+    </select>
+
+    <select id="queryById" resultMap="AmpColonyEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_PUSH_RECORD
+        where id = #{id} and UNIQUE_TOKEN = 0
+    </select>
 
 </mapper>

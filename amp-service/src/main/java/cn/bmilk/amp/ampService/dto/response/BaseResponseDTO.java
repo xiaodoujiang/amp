@@ -20,8 +20,8 @@ public class BaseResponseDTO implements Serializable {
     public static BaseResponseDTO SUCCESS(){
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         baseResponseDTO.setStatus(StatusEnum.SUCCESS.name());
-        baseResponseDTO.setStatus(ResponseCodeEnum.SUCCESS.getCode());
-        baseResponseDTO.setStatus(ResponseCodeEnum.SUCCESS.getMsg());
+        baseResponseDTO.setErrCode(ResponseCodeEnum.SUCCESS.getCode());
+        baseResponseDTO.setErrMsg(ResponseCodeEnum.SUCCESS.getMsg());
         return baseResponseDTO;
     }
     public static BaseResponseDTO SUCCESS(Object date){
@@ -48,8 +48,8 @@ public class BaseResponseDTO implements Serializable {
     public static BaseResponseDTO FAILURE(ResponseCodeEnum responseCodeEnum, String errMsg){
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         baseResponseDTO.setStatus(StatusEnum.FAILURE.name());
-        baseResponseDTO.setStatus(responseCodeEnum.getCode());
-        baseResponseDTO.setStatus(errMsg);
+        baseResponseDTO.setErrCode(responseCodeEnum.getCode());
+        baseResponseDTO.setErrMsg(errMsg);
         return baseResponseDTO;
     }
 }

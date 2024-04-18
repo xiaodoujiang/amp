@@ -11,9 +11,15 @@ public interface AmpColonyMapper {
 
     /**
      * 插入集群信息
+     *
      * @param ampColonyEntity
      */
     void insert(@Param("entity") AmpColonyEntity ampColonyEntity);
+
+    /**
+     * 查询环境对应的集群列表
+     */
+    List<AmpColonyEntity> queryListByEnv(@Param("env") String env);
 
 
 }

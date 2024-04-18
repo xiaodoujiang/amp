@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.bmilk.amp.ampService.mapper.AmpColonyMapper">
-    <resultMap id = "AmpColonyEntity" type = "cn.bmilk.amp.ampService.mapper.entity.AmpColonyEntity">
+    <resultMap id="AmpColonyEntity" type="cn.bmilk.amp.ampService.mapper.entity.AmpColonyEntity">
         <id column="id" property="id"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -32,23 +32,30 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO AMP_COLONY(
-            CREATE_TIME,
-            UPDATE_TIME,
-            CREATE_AT,
-            UPDATE_AT,
-            UNIQUE_TOKEN,
-            COLONY_NAME,
-            COLONY_DESC,
-            ENVIRONMENT
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        COLONY_NAME,
+        COLONY_DESC,
+        ENVIRONMENT
         ) VALUE(
-            NOW(),
-            NOW(),
-            'SYS',
-            'SYS',
-            0,
-            #{entity.colonyName},
-            #{entity.colonyDesc},
-            #{entity.environment}
+        NOW(),
+        NOW(),
+        'SYS',
+        'SYS',
+        0,
+        #{entity.colonyName},
+        #{entity.colonyDesc},
+        #{entity.environment}
         )
     </insert>
+
+    <select id="queryListByEnv" resultMap="AmpColonyEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_COLONY
+        where ENVIRONMENT = #{env} and UNIQUE_TOKEN=0
+    </select>
 </mapper>

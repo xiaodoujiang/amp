@@ -43,7 +43,7 @@
             CONFIG_VALUE,
             CONFIG_TYPE,
             CONFIG_DESC
-        ) VALUE
+        ) VALUES
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
             NOW(),

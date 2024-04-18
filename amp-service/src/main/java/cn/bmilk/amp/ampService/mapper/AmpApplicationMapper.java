@@ -26,7 +26,7 @@ public interface AmpApplicationMapper {
      * @param appName
      * @return
      */
-    AmpApplicationEntity queryApplicationByName(@Param("appName") String appName);
+    AmpApplicationEntity queryByAppName(@Param("appName") String appName);
 
 
 }

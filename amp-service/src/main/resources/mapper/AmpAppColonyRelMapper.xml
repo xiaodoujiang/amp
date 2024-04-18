@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.bmilk.amp.ampService.mapper.AmpAppColonyRelMapper">
-    <resultMap id="AmpAppEnvRelEntity" type="cn.bmilk.amp.ampService.mapper.entity.AmpAppColonyRelEntity">
+    <resultMap id="AmpAppColonyRelEntity" type="cn.bmilk.amp.ampService.mapper.entity.AmpAppColonyRelEntity">
         <id column="id" property="id"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -63,5 +63,31 @@
             #{entity.appPassword}
         )
     </insert>
+
+    <select id="queryByAppName" resultMap="AmpAppColonyRelEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_APP_COLONY_REL
+        where UNIQUE_TOKEN = 0 and APP_NAME= #{appName}
+    </select>
+
+    <select id="queryByAppNameAndColony" resultMap="AmpAppColonyRelEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_APP_COLONY_REL
+        where UNIQUE_TOKEN = 0 and
+        APP_NAME= #{appName} and
+        COLONY_NAME in
+        <foreach collection="colonyList" separator="," item="item" index="index" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryByAppAndColony" resultMap="AmpAppColonyRelEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_APP_COLONY_REL
+        where UNIQUE_TOKEN = 0 and APP_NAME= #{appName} and COLONY_NAME = #{colonyName}
+    </select>
 
 </mapper>

@@ -15,6 +15,7 @@ import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpPushRecordEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AmpTransactionalService {
 
@@ -39,8 +41,8 @@ public class AmpTransactionalService {
 
     @Transactional
     public void createAmp(List<AmpRecordEntity> ampRecordEntityList, List<AmpConfigItemTmpEntity> configList) {
-        ampRecordMapper.batchInsert(ampRecordEntityList);
         ampConfigItemTmpMapper.batchInsert(configList);
+        ampRecordMapper.batchInsert(ampRecordEntityList);
     }
 
     @Transactional
@@ -54,14 +56,14 @@ public class AmpTransactionalService {
                                                 List<String> colonyList,
                                                 List<AmpConfigItemTmpEntity> ampConfigItemTmpEntityList) {
         // 更新推送状态为推送中
-        int count = ampRecordMapper.updateStatus(ampRecordEntity.getAmpNo(), AmpStatusEnum.NEW.name(), AmpStatusEnum.PUSH_PROCESSING.name());
+        int count = ampRecordMapper.updateStatus(ampRecordEntity.getId(), AmpStatusEnum.NEW.name(), AmpStatusEnum.PUSH_PROCESSING.name());
         if(1 != count){
             return ampPushRecordMapper.queryByAmpNo(ampRecordEntity.getAmpNo());
         }
 
         // 更新配置项
         List<AmpConfigItemEntity> ampConfigItemList = buildAmpConfigItemList(ampRecordEntity, ampConfigItemTmpEntityList);
-        ampConfigItemMapper.batchInset(ampConfigItemList);
+        ampConfigItemMapper.batchInsert(ampConfigItemList);
 
         // 插入推送集群
         List<AmpPushRecordEntity> ampPushRecordEntityList = buildAmpRecordList(ampRecordEntity, colonyList);
@@ -81,6 +83,7 @@ public class AmpTransactionalService {
             ampConfigItemEntity.setConfigValue(ampConfigItemTmpEntity.getConfigValue());
             ampConfigItemEntity.setConfigDesc(ampConfigItemTmpEntity.getConfigDesc());
             ampConfigItemEntity.setConfigType(ampConfigItemTmpEntity.getConfigType());
+            ampConfigItemEntity.setEnvironment(ampRecordEntity.getEnvironment());
             result.add(ampConfigItemEntity);
         }
         return result;
@@ -92,10 +95,11 @@ public class AmpTransactionalService {
         for (String colony : colonyList) {
             AmpPushRecordEntity ampPushRecordEntity = new AmpPushRecordEntity();
             ampPushRecordEntity.setAmpNo(ampRecordEntity.getAmpNo());
-            ampPushRecordEntity.setEnvironment(ampPushRecordEntity.getEnvironment());
+            ampPushRecordEntity.setEnvironment(ampRecordEntity.getEnvironment());
             ampPushRecordEntity.setApplicationName(ampRecordEntity.getApplicationName());
             ampPushRecordEntity.setColonyName(colony);
             ampPushRecordEntity.setPushStatus(AmpPushStatusEnum.NEW.name());
+            ampPushRecordEntity.setSerialNo("PUSH-"+System.currentTimeMillis() + "colony");
             result.add(ampPushRecordEntity);
         }
         return result;

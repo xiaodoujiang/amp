@@ -1,8 +1,10 @@
 package cn.bmilk.amp.nacosgw.service;
 
+import cn.bmilk.amp.gwcommon.common.StatusEnum;
 import cn.bmilk.amp.gwcommon.request.LoginRequestDTO;
 import cn.bmilk.amp.gwcommon.response.BaseResponseDTO;
 import cn.bmilk.amp.gwcommon.response.LoginResponseDTO;
+import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
 import cn.bmilk.amp.nacosgw.config.RequestURIEnum;
 import cn.bmilk.amp.nacosgw.remote.NacosLoginResponseDTO;
 import cn.bmilk.tools.http.BaseJerseyFacade;
@@ -64,6 +66,9 @@ public class LoginService extends AbstractGwService<LoginRequestDTO> {
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         loginResponseDTO.setUserName(loginResponse.getUsername());
         loginResponseDTO.setToken(loginResponse.getAccessToken());
+        loginResponseDTO.setStatus(StatusEnum.SUCCESS.name());
+        loginResponseDTO.setErrCode(ResponseCodeEnum.SUCCESS.getCode());
+        loginResponseDTO.setErrMsg(ResponseCodeEnum.SUCCESS.getMsg());
         return loginResponseDTO;
     }
 }

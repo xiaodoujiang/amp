@@ -5,6 +5,8 @@ import cn.bmilk.amp.gwcommon.request.GwRequestDTO;
 import cn.bmilk.amp.gwcommon.response.BaseResponseDTO;
 import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
 import cn.bmilk.amp.nacosgw.service.DistributeService;
+import cn.bmilk.tools.utils.GsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+@Slf4j
 @RestController
 @RequestMapping("/gw")
 public class GwRequestController {
@@ -20,31 +23,32 @@ public class GwRequestController {
     private DistributeService distributeService;
 
     @PostMapping("/distribute")
-    public BaseResponseDTO distribute(@RequestBody GwRequestDTO gwRequestDTO){
+    public String distribute(@RequestBody GwRequestDTO gwRequestDTO){
+        BaseResponseDTO responseDTO = new BaseResponseDTO();
         try {
             String verify = verify(gwRequestDTO);
             if(StringUtils.isNoneBlank(verify)){
-                BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-                baseResponseDTO.setStatus(StatusEnum.FAILURE.name());
-                baseResponseDTO.setErrCode(ResponseCodeEnum.PARAMS_ERROR.getCode());
-                baseResponseDTO.setErrMsg(verify);
-                return baseResponseDTO;
+                responseDTO.setStatus(StatusEnum.FAILURE.name());
+                responseDTO.setErrCode(ResponseCodeEnum.PARAMS_ERROR.getCode());
+                responseDTO.setErrMsg(verify);
+                return GsonUtils.toJson(responseDTO);
             }
-            BaseResponseDTO distribute = distributeService.distribute(gwRequestDTO);
-            return distribute;
+            responseDTO = distributeService.distribute(gwRequestDTO);
         }catch (IllegalArgumentException illegalArgumentException){
-            BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-            baseResponseDTO.setStatus(StatusEnum.FAILURE.name());
-            baseResponseDTO.setErrCode(ResponseCodeEnum.PARAMS_ERROR.getCode());
-            baseResponseDTO.setErrMsg(illegalArgumentException.getMessage());
-            return baseResponseDTO;
+            log.error("gw-distribute failure, gwRequestDTO[{}], errMsg[{}]", gwRequestDTO, illegalArgumentException.getMessage(), illegalArgumentException);
+            responseDTO.setStatus(StatusEnum.FAILURE.name());
+            responseDTO.setErrCode(ResponseCodeEnum.PARAMS_ERROR.getCode());
+            responseDTO.setErrMsg(illegalArgumentException.getMessage());
         }catch (Exception e){
-            BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
-            baseResponseDTO.setStatus(StatusEnum.FAILURE.name());
-            baseResponseDTO.setErrCode(ResponseCodeEnum.SYSTEM_ERROR.getCode());
-            baseResponseDTO.setErrMsg(e.getMessage());
-            return baseResponseDTO;
+            log.error("gw-distribute failure, gwRequestDTO[{}], errMsg[{}]", gwRequestDTO, e.getMessage(), e);
+            responseDTO.setStatus(StatusEnum.FAILURE.name());
+            responseDTO.setErrCode(ResponseCodeEnum.SYSTEM_ERROR.getCode());
+            responseDTO.setErrMsg(e.getMessage());
+        }finally {
+            log.info("gw-distribute end, gwRequestDTO[{}], response[{}]", gwRequestDTO, responseDTO);
         }
+        return GsonUtils.toJson(responseDTO);
+
     }
 
     private String verify(GwRequestDTO gwRequestDTO){

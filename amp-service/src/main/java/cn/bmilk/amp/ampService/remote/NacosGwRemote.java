@@ -13,14 +13,17 @@ import cn.bmilk.amp.gwcommon.request.PushConfigurationRequestDTO;
 import cn.bmilk.amp.gwcommon.response.LoginResponseDTO;
 import cn.bmilk.amp.gwcommon.response.PushConfigResponseDTO;
 import cn.bmilk.tools.utils.GsonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.mbeans.SparseUserDatabaseMBean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Slf4j
+@Component
 public class NacosGwRemote {
 
     @Resource
@@ -29,11 +32,13 @@ public class NacosGwRemote {
 
     public LoginResponseDTO login(String username, String password, String appAddress, String path){
         LoginResponseDTO loginResponseDTO = null;
+        GwRequestDTO gwRequestDTO = null;
         try {
-            GwRequestDTO gwRequestDTO = buildLoginRequestDTO(username, password, appAddress + path);
-            loginResponseDTO = nacosGwClient.distribute(gwRequestDTO);
+            gwRequestDTO = buildLoginRequestDTO(username, password, appAddress + path);
+            String responseStr =  nacosGwClient.distribute(gwRequestDTO);
+            loginResponseDTO = GsonUtils.fromJson(responseStr, LoginResponseDTO.class);
         }catch (Exception e){
-            // todo 错误日志
+            log.error("nacos-gw login failure, gwRequestDTO[{}], errMsg[{}]", gwRequestDTO, e.getMessage(), e);
             loginResponseDTO = new LoginResponseDTO();
             loginResponseDTO.setStatus(StatusEnum.FAILURE.name());
         }
@@ -48,12 +53,14 @@ public class NacosGwRemote {
                                             AmpApplicationEntity ampApplicationEntity,
                                             List<AmpConfigItemEntity> configItemEntityList){
         PushConfigResponseDTO pushConfigResponseDTO = null;
+        GwRequestDTO gwRequestDTO = null;
         try {
-            GwRequestDTO gwRequestDTO = buildPushConfigurationRequestDTO(token, appAddress + path,
+            gwRequestDTO = buildPushConfigurationRequestDTO(token, appAddress + path,
                     ampPushRecordEntity, ampApplicationEntity, configItemEntityList);
-            pushConfigResponseDTO = nacosGwClient.distribute(gwRequestDTO);
+            String responseStr = nacosGwClient.distribute(gwRequestDTO);
+            pushConfigResponseDTO = GsonUtils.fromJson(responseStr, PushConfigResponseDTO.class);
         }catch (Exception e){
-            // todo 错误日志
+            log.error("nacos-gw pushConfig failure, gwRequestDTO[{}], errMsg[{}]", gwRequestDTO, e.getMessage(), e);
             pushConfigResponseDTO = new PushConfigResponseDTO();
             pushConfigResponseDTO.setStatus(StatusEnum.FAILURE.name());
         }
@@ -79,9 +86,9 @@ public class NacosGwRemote {
         List< ConfigurationDTO> configurationDTOList = new ArrayList<>();
         for (AmpConfigItemEntity ampConfigItemEntity : configItemEntityList){
             ConfigurationDTO configurationDTO = new ConfigurationDTO();
-            configurationDTO.setKey(configurationDTO.getKey());
-            configurationDTO.setValue(configurationDTO.getValue());
-            configurationDTO.setDesc(configurationDTO.getDesc());
+            configurationDTO.setKey(ampConfigItemEntity.getConfigKey());
+            configurationDTO.setValue(ampConfigItemEntity.getConfigValue());
+            configurationDTO.setDesc(ampConfigItemEntity.getConfigDesc());
             configurationDTOList.add(configurationDTO);
         }
 
@@ -96,6 +103,6 @@ public class NacosGwRemote {
         pushConfigurationRequestDTO.setSerialNo(ampPushRecordEntity.getSerialNo());
         pushConfigurationRequestDTO.setConfigurationDTOList(configurationDTOList);
 
-        return new GwRequestDTO(AppProperties.APP_CHANEL, BusinessTypeEnum.AUTH_LOGIN.name(), GsonUtils.toJson(pushConfigurationRequestDTO));
+        return new GwRequestDTO(AppProperties.APP_CHANEL, BusinessTypeEnum.PUSH_CONFIGURATION.name(), GsonUtils.toJson(pushConfigurationRequestDTO));
     }
 }

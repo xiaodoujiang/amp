@@ -30,4 +30,8 @@ public class AmpConfigItemEntity extends BaseEntity {
      * 描述
      */
     private String configDesc;
+    /**
+     * 环境
+     */
+    private String environment;
 }

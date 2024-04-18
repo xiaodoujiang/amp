@@ -82,7 +82,7 @@
             CONFIG_VALUE,
             CONFIG_TYPE,
             CONFIG_DESC
-        ) VALUE
+        ) VALUES
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
                 NOW(),
@@ -102,11 +102,12 @@
 
     </insert>
 
-    <select id="queryByAppName" resultType="java.util.List">
+    <select id="queryByAppNameAndEnv" resultMap="AmpConfigItemEntity">
         select
             <include refid="Base_column_list"/>
         from AMP_CONFIG_ITEM
         where APPLICATION_NAME = #{appName}
+        and ENVIRONMENT = #{env}
         and UNIQUE_TOKEN = 0
     </select>
 

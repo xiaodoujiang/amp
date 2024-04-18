@@ -9,12 +9,14 @@ import cn.bmilk.amp.ampService.dto.response.BaseResponseDTO;
 import cn.bmilk.amp.ampService.service.AmpService;
 
 import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/amp")
 public class AmpController {
@@ -32,6 +34,7 @@ public class AmpController {
             List<AmpRecordResponseDTO> ampRecordResponseDTOList = ampService.createAmp(recordRequestDTO);
             responseDTO = BaseResponseDTO.SUCCESS(ampRecordResponseDTOList);
         } catch (Exception e) {
+            log.error("createAmp error, requestDTO[{}], errMsg[{}]", recordRequestDTO, e.getMessage(), e);
             responseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
         return responseDTO;
@@ -72,12 +75,13 @@ public class AmpController {
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         try {
             String verify = verifyPush(ampPushRequestDTO);
-            if(StringUtils.isBlank(verify)){
+            if(StringUtils.isNotBlank(verify)){
                 return BaseResponseDTO.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
             }
             AmpPushResponseDTO ampPushResponseDTO = ampService.recordPush(ampPushRequestDTO);
             baseResponseDTO = BaseResponseDTO.SUCCESS(ampPushResponseDTO);
         }catch (Exception e){
+            log.error("push amp error, ampPushRequestDTO[{}], errMsg[{}]", ampPushRequestDTO, e.getMessage(), e);
             baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
         return baseResponseDTO;

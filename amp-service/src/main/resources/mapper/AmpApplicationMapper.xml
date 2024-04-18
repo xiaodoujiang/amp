@@ -82,7 +82,7 @@
         )
     </insert>
 
-    <select id="queryAllApplication" resultMap="java.util.List">
+    <select id="queryAllApplication" resultType="java.util.List">
         select
             <include refid="Base_column_list"/>
         from AMP_APPLICATION

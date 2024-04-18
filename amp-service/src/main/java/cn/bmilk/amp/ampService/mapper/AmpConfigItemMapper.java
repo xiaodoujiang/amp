@@ -19,14 +19,15 @@ public interface AmpConfigItemMapper {
      * 批量插入
      * @param ampConfigItemEntityList
      */
-    void batchInset(@Param("entityList")List<AmpConfigItemEntity> ampConfigItemEntityList);
+    void batchInsert(@Param("entityList")List<AmpConfigItemEntity> ampConfigItemEntityList);
 
     /**
      * 查询指定应用的所有配置项
      * @param appName
      * @return
      */
-    List<AmpConfigItemEntity> queryByAppName(@Param("appName")String appName);
+    List<AmpConfigItemEntity> queryByAppNameAndEnv(@Param("appName")String appName,
+                                                   @Param("env") String env);
 
 
 }
