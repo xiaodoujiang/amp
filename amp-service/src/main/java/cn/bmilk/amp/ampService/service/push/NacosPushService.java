@@ -64,12 +64,12 @@ public class NacosPushService implements AmpPushService {
         try {
             token = login(ampAppColonyRelEntity);
         }catch (Exception e){
-            // 更新推送状态为失败
+            log.error("login failure, ampAppColonyRelEntity[{}]", ampAppColonyRelEntity);
             return false;
         }
         // 推送
         PushConfigResponseDTO pushConfigResponseDTO = nacosGwRemote.pushConfig(token, ampAppColonyRelEntity.getAppRequestAddressValue(),
-                ampAppColonyRelEntity.getAppRequestAddressValue(), ampPushRecordEntity, ampApplicationEntity, configItemList);
+                ampAppColonyRelEntity.getAppRequestPathValue(), ampPushRecordEntity, ampApplicationEntity, configItemList);
         // 更新推送状态
         ampPushRecordMapper.updateStatus(ampPushRecordEntity.getId(), AmpPushStatusEnum.PROCESSING.name(),
                 pushConfigResponseDTO.getStatus(), pushConfigResponseDTO.getErrCode(), pushConfigResponseDTO.getErrMsg());
@@ -87,7 +87,9 @@ public class NacosPushService implements AmpPushService {
         if(StatusEnum.SUCCESS.name().equals(login.getStatus())){
             return login.getToken();
         }
+
         // 没有获取到token  直接失败
+        log.error("login failure, LoginResponseDTO[{}]", login);
         throw new RuntimeException();
     }
 
