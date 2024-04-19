@@ -100,7 +100,7 @@ public class NacosPushService implements AmpPushService {
         if(null == configItemList || configItemList.isEmpty()) return;
         for (AmpConfigItemEntity item : configItemList){
             if(ConfigTypeEnum.NORMAL_CONFIG.name().equals(item.getConfigType())){
-                break;
+                continue;
             }
             appNameList.add(item.getDependAppName());
             tmp.put(item.getDependAppName()+ item.getConfigKey(), item);

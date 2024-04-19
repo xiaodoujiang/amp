@@ -42,6 +42,7 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
         ampConfigItemTmpEntity.setConfigKey(configDetailDTO.getConfigKey());
         ampConfigItemTmpEntity.setConfigValue(configDetailDTO.getConfigValue());
         ampConfigItemTmpEntity.setConfigDesc(configDetailDTO.getConfigValue());
+        ampConfigItemTmpEntity.setDependAppName(configDetailDTO.getDependAppName());
         return ampConfigItemTmpEntity;
     }
 }
