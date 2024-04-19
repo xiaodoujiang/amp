@@ -67,8 +67,10 @@ public class YamlUtils {
                     if (!current.containsKey(parts[i])) {
                         current.put(parts[i], new HashMap<String, Object>());
                     }
+                    if( !(current.get(key) instanceof Map)){
+                        throw new IllegalArgumentException("Conflict: " + parts[i] + " at " + String.join(".", parts) + " is already defined as a value.");
+                    }
                     current = (Map<String, Object>) current.get(parts[i]);
-
                 }
             }
         }

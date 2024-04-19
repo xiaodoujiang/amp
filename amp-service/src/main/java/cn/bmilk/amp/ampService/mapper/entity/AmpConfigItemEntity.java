@@ -27,6 +27,10 @@ public class AmpConfigItemEntity extends BaseEntity {
      */
     private String configType;
     /**
+     * 依赖应用名称
+     */
+    private String dependAppName;
+    /**
      * 描述
      */
     private String configDesc;

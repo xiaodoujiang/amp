@@ -12,8 +12,10 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="app_name" property="appName"/>
         <result column="colony_name" property="colonyName"/>
-        <result column="app_request_address" property="appRequestAddress"/>
-        <result column="app_request_path" property="appRequestPath"/>
+        <result column="app_request_address_key" property="appRequestAddressKey"/>
+        <result column="app_request_path_key" property="appRequestPathKey"/>
+        <result column="app_request_address_value" property="appRequestAddressValue"/>
+        <result column="app_request_path_value" property="appRequestPathValue"/>
         <result column="app_username" property="appUsername"/>
         <result column="app_password" property="appPassword"/>
     </resultMap>
@@ -27,8 +29,10 @@
         UNIQUE_TOKEN,
         APP_NAME,
         COLONY_NAME,
-        APP_REQUEST_ADDRESS,
-        APP_REQUEST_PATH,
+        APP_REQUEST_ADDRESS_KEY,
+        APP_REQUEST_PATH_KEY,
+        APP_REQUEST_ADDRESS_VALUE,
+        APP_REQUEST_PATH_VALUE,
         APP_USERNAME,
         APP_PASSWORD
     </sql>
@@ -45,8 +49,10 @@
             UNIQUE_TOKEN,
             APP_NAME,
             COLONY_NAME,
-            APP_REQUEST_ADDRESS,
-            APP_REQUEST_PATH,
+            APP_REQUEST_ADDRESS_KEY,
+            APP_REQUEST_PATH_KEY,
+            APP_REQUEST_ADDRESS_VALUE,
+            APP_REQUEST_PATH_VALUE,
             APP_USERNAME,
             APP_PASSWORD
         ) VALUE(
@@ -57,8 +63,10 @@
             0,
             #{entity.appName},
             #{entity.colonyName},
-            #{entity.appRequestAddress},
-            #{entity.appRequestPath},
+            #{entity.appRequestAddressKey},
+            #{entity.appRequestPathKey},
+            #{entity.appRequestAddressValue},
+            #{entity.appRequestPathValue},
             #{entity.appUsername},
             #{entity.appPassword}
         )
@@ -88,6 +96,17 @@
         <include refid="Base_column_list"/>
         from AMP_APP_COLONY_REL
         where UNIQUE_TOKEN = 0 and APP_NAME= #{appName} and COLONY_NAME = #{colonyName}
+    </select>
+
+    <select id="queryByAppListAndColony" resultMap="AmpAppColonyRelEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_APP_COLONY_REL
+        where UNIQUE_TOKEN = 0 and COLONY_NAME = #{colonyName}
+        and  APP_NAME in
+        <foreach collection="appNameList" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

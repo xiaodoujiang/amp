@@ -87,7 +87,7 @@
             SERIAL_NO,
             ERR_CODE,
             ERR_MSG
-        ) VALUE
+        ) VALUES
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
                 NOW(),

@@ -30,6 +30,10 @@ public class AmpConfigItemHisEntity extends BaseEntity {
      */
     private String configValue;
     /**
+     * 依赖应用名称
+     */
+    private String dependAppName;
+    /**
      * 描述
      */
     private String configDesc;

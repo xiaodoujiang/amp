@@ -49,7 +49,8 @@ public interface AmpRecordMapper {
      *
      * @param ampNo
      */
-    void deleteAmpRecord(@Param("ampNo") String ampNo);
+    void deleteAmpRecord(@Param("ampNo") String ampNo,
+                         @Param("status")String status);
 
     /**
      * 更新推送单状态

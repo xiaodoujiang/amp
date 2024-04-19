@@ -38,4 +38,14 @@ public interface AmpAppColonyRelMapper {
      */
     AmpAppColonyRelEntity queryByAppAndColony(@Param("appName")String appName,
                                               @Param("colonyName") String colonyName);
+
+    /**
+     * 查询app和
+     *
+     * @param appNameList
+     * @param colonyName
+     * @return
+     */
+    List<AmpAppColonyRelEntity> queryByAppListAndColony(@Param("appNameList") List<String> appNameList,
+                                                        @Param("colonyName") String colonyName);
 }

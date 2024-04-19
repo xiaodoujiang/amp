@@ -17,11 +17,19 @@ public class AmpAppColonyRelEntity extends BaseEntity {
     /**
      * 应用请求地址
      */
-    private String appRequestAddress;
+    private String appRequestAddressKey;
     /**
      * 应用请求path
      */
-    private String appRequestPath;
+    private String appRequestPathKey;
+    /**
+     * 应用请求地址
+     */
+    private String appRequestAddressValue;
+    /**
+     * 应用请求path
+     */
+    private String appRequestPathValue;
     /**
      * 应用访问用户名
      */

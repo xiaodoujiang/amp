@@ -15,6 +15,7 @@
         <result column="config_value" property="configValue"/>
         <result column="config_type" property="configType"/>
         <result column="config_desc" property="configDesc"/>
+        <result column="depend_app_name" property="dependAppName"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -28,7 +29,8 @@
         CONFIG_KEY,
         CONFIG_VALUE,
         CONFIG_TYPE,
-        CONFIG_DESC
+        CONFIG_DESC,
+        DEPEND_APP_NAME
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
@@ -42,20 +44,22 @@
             CONFIG_KEY,
             CONFIG_VALUE,
             CONFIG_TYPE,
-            CONFIG_DESC
+            CONFIG_DESC,
+            DEPEND_APP_NAME
         ) VALUES
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
-            NOW(),
-            NOW(),
-            'SYS',
-            'SYS',
-            0,
-            #{entity.ampNo},
-            #{entity.configKey},
-            #{entity.configValue},
-            #{entity.configType},
-            #{entity.configDesc}
+                NOW(),
+                NOW(),
+                'SYS',
+                'SYS',
+                0,
+                #{entity.ampNo},
+                #{entity.configKey},
+                #{entity.configValue},
+                #{entity.configType},
+                #{entity.configDesc},
+                #{entity.dependAppName}
             )
         </foreach>
 

@@ -148,4 +148,10 @@
         SET STATUS = #{newStatus}
         WHERE id = #{id} and STATUS = #{oldStatus} and UNIQUE_TOKEN = 0
     </update>
+
+    <update id="deleteAmpRecord">
+        UPDATE AMP_RECORD
+        SET STATUS = #{newStatus}
+        WHERE  AMP_NO = #{ampNo} and STATUS = #{status} and UNIQUE_TOKEN = 0
+    </update>
 </mapper>

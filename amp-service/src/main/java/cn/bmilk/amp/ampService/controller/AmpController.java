@@ -85,8 +85,22 @@ public class AmpController {
             baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
         return baseResponseDTO;
-
     }
+
+    @GetMapping("/push/detail")
+    public BaseResponseDTO queryPushDetail(@RequestParam(value = "ampNo") String ampNo){
+        BaseResponseDTO baseResponseDTO = null;
+        try {
+            AmpPushResponseDTO ampPushResponseDTO = ampService.queryPushDetail(ampNo);
+            baseResponseDTO = BaseResponseDTO.SUCCESS(ampPushResponseDTO);
+        }catch (Exception e){
+            log.error("queryPushDetail  error, ampNo[{}], errMsg[{}]", ampNo, e.getMessage(), e);
+            baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
+        }
+        return baseResponseDTO;
+    }
+
+
 
 
     private String verifyCreateAmp(AmpRecordRequestDTO recordRequestDTO) {

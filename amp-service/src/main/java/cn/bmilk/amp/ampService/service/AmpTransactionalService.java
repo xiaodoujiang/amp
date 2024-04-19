@@ -48,7 +48,7 @@ public class AmpTransactionalService {
     @Transactional
     public void deleteAmp(String ampNo) {
         ampConfigItemTmpMapper.deleteConfigByAmpNo(ampNo);
-        ampRecordMapper.deleteAmpRecord(ampNo);
+        ampRecordMapper.deleteAmpRecord(ampNo, AmpStatusEnum.DISCARD.name());
     }
 
     @Transactional

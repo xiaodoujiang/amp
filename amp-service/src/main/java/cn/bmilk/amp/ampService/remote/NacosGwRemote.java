@@ -69,8 +69,6 @@ public class NacosGwRemote {
 
 
 
-
-
     private GwRequestDTO buildLoginRequestDTO(String username, String password, String configCenterAddress){
         LoginRequestDTO loginRequestDTO = LoginRequestDTO.build(username, password, configCenterAddress);
 

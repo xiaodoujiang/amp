@@ -124,14 +124,13 @@ public class AmpService {
         List<AmpConfigItemTmpEntity> ampConfigItemTmpEntityList = ampConfigItemTmpMapper.queryConfigListByAmpNo(ampNo);
         // 生成推送记录单
         List<AmpPushRecordEntity> ampPushRecordEntitieList = ampTransactionalService.recordPush(ampRecordEntity, colonyList, ampConfigItemTmpEntityList);
-        List<ConfigPushDetailDTO> configPushDetailDTOList = new ArrayList<>();
-        for (AmpPushRecordEntity ampPushRecordEntity : ampPushRecordEntitieList) {
-            pushConfigExecutor.execute(new ConfigPushTask(ampPushRecordEntity.getId()));
-            configPushDetailDTOList.add(ConfigPushDetailDTO.build(ampPushRecordEntity));
-        }
-        AmpPushResponseDTO ampPushResponseDTO = AmpPushResponseDTO.build(ampRecordEntity);
-        ampPushResponseDTO.setConfigPushDetailDTOList(configPushDetailDTOList);
-        return ampPushResponseDTO;
+        return buildAmpPushResponseDTO(ampRecordEntity, ampPushRecordEntitieList);
+    }
+
+    public AmpPushResponseDTO queryPushDetail(String ampNo){
+        AmpRecordEntity ampRecordEntity = ampRecordMapper.queryAmpRecord(ampNo);
+        List<AmpPushRecordEntity> ampPushRecordEntitieList = ampPushRecordMapper.queryByAmpNo(ampNo);
+        return buildAmpPushResponseDTO(ampRecordEntity, ampPushRecordEntitieList);
     }
 
     public boolean push(long recordId) {
@@ -171,6 +170,18 @@ public class AmpService {
             result.add(new ConfigDetailDTO(ampConfigItemTmpEntity));
         }
         return result;
+    }
+
+    private AmpPushResponseDTO buildAmpPushResponseDTO(AmpRecordEntity ampRecordEntity,
+                                                       List<AmpPushRecordEntity> ampPushRecordEntitieList){
+        List<ConfigPushDetailDTO> configPushDetailDTOList = new ArrayList<>();
+        for (AmpPushRecordEntity ampPushRecordEntity : ampPushRecordEntitieList) {
+            pushConfigExecutor.execute(new ConfigPushTask(ampPushRecordEntity.getId()));
+            configPushDetailDTOList.add(ConfigPushDetailDTO.build(ampPushRecordEntity));
+        }
+        AmpPushResponseDTO ampPushResponseDTO = AmpPushResponseDTO.build(ampRecordEntity);
+        ampPushResponseDTO.setConfigPushDetailDTOList(configPushDetailDTOList);
+        return ampPushResponseDTO;
     }
 
 }
