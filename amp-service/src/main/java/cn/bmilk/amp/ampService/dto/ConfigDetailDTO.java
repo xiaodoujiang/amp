@@ -23,11 +23,6 @@ public class ConfigDetailDTO {
      * 配置项备注
      */
     private String configDesc;
-    /**
-     * 依赖应用名称
-     */
-    private String dependAppName;
-
 
     public ConfigDetailDTO() {
     }

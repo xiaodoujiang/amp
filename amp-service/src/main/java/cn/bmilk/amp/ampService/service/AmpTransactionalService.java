@@ -84,7 +84,6 @@ public class AmpTransactionalService {
             ampConfigItemEntity.setConfigDesc(ampConfigItemTmpEntity.getConfigDesc());
             ampConfigItemEntity.setConfigType(ampConfigItemTmpEntity.getConfigType());
             ampConfigItemEntity.setEnvironment(ampRecordEntity.getEnvironment());
-            ampConfigItemEntity.setDependAppName(ampConfigItemTmpEntity.getDependAppName());
             result.add(ampConfigItemEntity);
         }
         return result;

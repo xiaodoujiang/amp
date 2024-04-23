@@ -22,10 +22,6 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
      */
     private String configValue;
     /**
-     * 依赖应用名称
-     */
-    private String dependAppName;
-    /**
      * 配置项类型
      */
     private String configType;
@@ -42,7 +38,6 @@ public class AmpConfigItemTmpEntity extends BaseEntity {
         ampConfigItemTmpEntity.setConfigKey(configDetailDTO.getConfigKey());
         ampConfigItemTmpEntity.setConfigValue(configDetailDTO.getConfigValue());
         ampConfigItemTmpEntity.setConfigDesc(configDetailDTO.getConfigValue());
-        ampConfigItemTmpEntity.setDependAppName(configDetailDTO.getDependAppName());
         return ampConfigItemTmpEntity;
     }
 }

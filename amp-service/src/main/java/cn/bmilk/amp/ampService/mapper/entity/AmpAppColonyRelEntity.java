@@ -14,28 +14,4 @@ public class AmpAppColonyRelEntity extends BaseEntity {
      * 集群名称
      */
     private String colonyName;
-    /**
-     * 应用请求地址
-     */
-    private String appRequestAddressKey;
-    /**
-     * 应用请求path
-     */
-    private String appRequestPathKey;
-    /**
-     * 应用请求地址
-     */
-    private String appRequestAddressValue;
-    /**
-     * 应用请求path
-     */
-    private String appRequestPathValue;
-    /**
-     * 应用访问用户名
-     */
-    private String appUsername;
-    /**
-     * 应用访问密码
-     */
-    private String appPassword;
 }

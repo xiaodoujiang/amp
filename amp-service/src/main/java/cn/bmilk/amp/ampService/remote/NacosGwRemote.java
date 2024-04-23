@@ -1,9 +1,11 @@
 package cn.bmilk.amp.ampService.remote;
 
 import cn.bmilk.amp.ampService.config.AppProperties;
+import cn.bmilk.amp.ampService.dto.ConfigCenterDetailDTO;
 import cn.bmilk.amp.ampService.mapper.entity.AmpApplicationEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpPushRecordEntity;
+import cn.bmilk.amp.ampService.service.ConfigCenterService;
 import cn.bmilk.amp.gwcommon.ConfigurationDTO;
 import cn.bmilk.amp.gwcommon.common.BusinessTypeEnum;
 import cn.bmilk.amp.gwcommon.common.StatusEnum;
@@ -26,8 +28,13 @@ import java.util.List;
 @Component
 public class NacosGwRemote {
 
+    private static final String CONFIG_CENTER_TYPE = "nacos";
+
     @Resource
     private NacosGwClient nacosGwClient;
+
+    @Resource
+    private ConfigCenterService configCenterService;
 
 
     public LoginResponseDTO login(String username, String password, String appAddress, String path){
@@ -46,17 +53,14 @@ public class NacosGwRemote {
     }
 
 
-    public PushConfigResponseDTO pushConfig(String token,
-                                            String appAddress,
-                                            String path,
-                                            AmpPushRecordEntity ampPushRecordEntity,
+    public PushConfigResponseDTO pushConfig(AmpPushRecordEntity ampPushRecordEntity,
                                             AmpApplicationEntity ampApplicationEntity,
                                             List<AmpConfigItemEntity> configItemEntityList){
-        PushConfigResponseDTO pushConfigResponseDTO = null;
+        PushConfigResponseDTO pushConfigResponseDTO ;
         GwRequestDTO gwRequestDTO = null;
         try {
-            gwRequestDTO = buildPushConfigurationRequestDTO(token, appAddress + path,
-                    ampPushRecordEntity, ampApplicationEntity, configItemEntityList);
+            ConfigCenterDetailDTO configCenterDetailDTO = configCenterService.login(ampPushRecordEntity.getColonyName(), CONFIG_CENTER_TYPE);
+            gwRequestDTO = buildPushConfigurationRequestDTO(configCenterDetailDTO, ampPushRecordEntity, ampApplicationEntity, configItemEntityList);
             String responseStr = nacosGwClient.distribute(gwRequestDTO);
             pushConfigResponseDTO = GsonUtils.fromJson(responseStr, PushConfigResponseDTO.class);
         }catch (Exception e){
@@ -75,8 +79,7 @@ public class NacosGwRemote {
         return new GwRequestDTO(AppProperties.APP_CHANEL, BusinessTypeEnum.AUTH_LOGIN.name(), GsonUtils.toJson(loginRequestDTO));
     }
 
-    private GwRequestDTO buildPushConfigurationRequestDTO(String token,
-                                                          String configCenterAddress,
+    private GwRequestDTO buildPushConfigurationRequestDTO(ConfigCenterDetailDTO configCenterDetailDTO,
                                                           AmpPushRecordEntity ampPushRecordEntity,
                                                           AmpApplicationEntity ampApplicationEntity,
                                                           List<AmpConfigItemEntity> configItemEntityList){
@@ -91,8 +94,8 @@ public class NacosGwRemote {
         }
 
         PushConfigurationRequestDTO pushConfigurationRequestDTO = new PushConfigurationRequestDTO();
-        pushConfigurationRequestDTO.setToken(token);
-        pushConfigurationRequestDTO.setConfigCenterAddress(configCenterAddress);
+        pushConfigurationRequestDTO.setToken(configCenterDetailDTO.getToken());
+        pushConfigurationRequestDTO.setConfigCenterAddress(configCenterDetailDTO.getRequestAddress() + configCenterDetailDTO.getRequestPath());
         pushConfigurationRequestDTO.setNamespace(ampApplicationEntity.getConfigTenant());
         pushConfigurationRequestDTO.setFileType(ampApplicationEntity.getConfigFileType());
         pushConfigurationRequestDTO.setEnv(ampPushRecordEntity.getEnvironment());

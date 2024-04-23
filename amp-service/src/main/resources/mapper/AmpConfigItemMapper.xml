@@ -17,7 +17,6 @@
         <result column="config_value" property="configValue"/>
         <result column="config_type" property="configType"/>
         <result column="config_desc" property="configDesc"/>
-        <result column="depend_app_name" property="dependAppName"/>
     </resultMap>
 
     <sql id="Base_column_list">
@@ -33,8 +32,7 @@
         CONFIG_KEY,
         CONFIG_VALUE,
         CONFIG_TYPE,
-        CONFIG_DESC,
-        DEPEND_APP_NAME
+        CONFIG_DESC
     </sql>
 
     <insert id="insert">
@@ -53,8 +51,7 @@
             CONFIG_KEY,
             CONFIG_VALUE,
             CONFIG_TYPE,
-            CONFIG_DESC,
-            DEPEND_APP_NAME
+            CONFIG_DESC
         ) VALUE(
             NOW(),
             NOW(),
@@ -67,8 +64,7 @@
             #{entity.configKey},
             #{entity.configValue},
             #{entity.configType},
-            #{entity.configDesc},
-            #{entity.dependAppName}
+            #{entity.configDesc}
         )
     </insert>
 
@@ -85,8 +81,7 @@
             CONFIG_KEY,
             CONFIG_VALUE,
             CONFIG_TYPE,
-            CONFIG_DESC,
-            DEPEND_APP_NAME
+            CONFIG_DESC
         ) VALUES
         <foreach collection="entityList" index="index" item="entity" separator=",">
             (
@@ -101,8 +96,7 @@
                 #{entity.configKey},
                 #{entity.configValue},
                 #{entity.configType},
-                #{entity.configDesc},
-                #{entity.dependAppName}
+                #{entity.configDesc}
             )
         </foreach>
 
