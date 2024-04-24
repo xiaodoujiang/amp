@@ -17,6 +17,12 @@ public interface AmpColonyConfigMapper {
     void insert(@Param("entity") AmpColonyConfigEntity entity);
 
     /**
+     * 批量插入
+     * @param colonyConfigEntityList
+     */
+    void batchInsert(@Param("entityList") List<AmpColonyConfigEntity> colonyConfigEntityList);
+
+    /**
      * 根据key列表查询环境配置项
      * @param keySet
      * @param colonyName

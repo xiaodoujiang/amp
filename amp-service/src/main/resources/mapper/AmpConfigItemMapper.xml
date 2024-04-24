@@ -11,8 +11,8 @@
         <result column="update_at" property="updateAt"/>
         <result column="unique_token" property="uniqueToken"/>
         <result column="environment" property="environment"/>
-        <result column="application_id" property="applicationId"/>
-        <result column="application_name" property="applicationName"/>
+        <result column="app_id" property="appId"/>
+        <result column="app_name" property="appName"/>
         <result column="config_key" property="configKey"/>
         <result column="config_value" property="configValue"/>
         <result column="config_type" property="configType"/>
@@ -27,8 +27,8 @@
         UPDATE_AT,
         UNIQUE_TOKEN,
         ENVIRONMENT,
-        APPLICATION_ID,
-        APPLICATION_NAME,
+        APP_ID,
+        APP_NAME,
         CONFIG_KEY,
         CONFIG_VALUE,
         CONFIG_TYPE,
@@ -46,8 +46,8 @@
             UPDATE_AT,
             UNIQUE_TOKEN,
             ENVIRONMENT,
-            APPLICATION_ID,
-            APPLICATION_NAME,
+            APP_ID,
+            APP_NAME,
             CONFIG_KEY,
             CONFIG_VALUE,
             CONFIG_TYPE,
@@ -59,8 +59,8 @@
             'SYS',
             0,
             #{entity.environment},
-            #{entity.applicationId},
-            #{entity.applicationName},
+            #{entity.appId},
+            #{entity.appName},
             #{entity.configKey},
             #{entity.configValue},
             #{entity.configType},
@@ -76,8 +76,8 @@
             UPDATE_AT,
             UNIQUE_TOKEN,
             ENVIRONMENT,
-            APPLICATION_ID,
-            APPLICATION_NAME,
+            APP_ID,
+            APP_NAME,
             CONFIG_KEY,
             CONFIG_VALUE,
             CONFIG_TYPE,
@@ -91,8 +91,8 @@
                 'SYS',
                 0,
                 #{entity.environment},
-                #{entity.applicationId},
-                #{entity.applicationName},
+                #{entity.appId},
+                #{entity.appName},
                 #{entity.configKey},
                 #{entity.configValue},
                 #{entity.configType},
@@ -106,7 +106,7 @@
         select
             <include refid="Base_column_list"/>
         from AMP_CONFIG_ITEM
-        where APPLICATION_NAME = #{appName}
+        where APP_NAME = #{appName}
         and ENVIRONMENT = #{env}
         and UNIQUE_TOKEN = 0
     </select>

@@ -1,5 +1,7 @@
 package cn.bmilk.amp.ampService.mapper.entity;
 
+import cn.bmilk.amp.ampService.common.AppConFigFormatEnum;
+import cn.bmilk.amp.ampService.dto.request.ApplicationRequestDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,11 +11,15 @@ public class AmpApplicationEntity extends BaseEntity {
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 应用描述
      */
-    private String applicationDesc;
+    private String appDesc;
+    /**
+     * 应用类型
+     */
+    private String appType;
     /**
      * 应用请求地址KEY
      */
@@ -50,4 +56,23 @@ public class AmpApplicationEntity extends BaseEntity {
      * 操作员
      */
     private String operator;
+
+    public static AmpApplicationEntity build(ApplicationRequestDTO requestDTO){
+        AmpApplicationEntity result = new AmpApplicationEntity();
+        String appName = requestDTO.getAppName();
+        result.appName = appName;
+        result.appDesc = requestDTO.getAppDesc();
+        result.appType = requestDTO.getAppType();
+        result.addressEnvKey = AppConFigFormatEnum.getRequestAddressKey(appName);
+        result.addressEnvValue = AppConFigFormatEnum.getRequestAddressValue(appName);
+        result.pathEnvKey = AppConFigFormatEnum.getRequestPathKey(appName);
+        result.pathEnvValue = AppConFigFormatEnum.getRequestPathValue(appName);
+        result.configFileType = requestDTO.getConfigFileType();
+        result.configCenterApp = requestDTO.getConfigCenterApp();
+        result.configGroup = requestDTO.getConfigGroup();
+        result.configTenant = requestDTO.getConfigTenant();
+        result.operator = requestDTO.getOperator();
+
+        return result;
+    }
 }

@@ -48,6 +48,30 @@
         )
     </insert>
 
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO AMP_APP_COLONY_REL(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            APP_NAME,
+            COLONY_NAME
+        ) VALUES
+        <foreach collection="entityList" index="index" item="entity" separator=",">
+            (
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.appName},
+            #{entity.colonyName}
+            )
+        </foreach>
+
+    </insert>
+
     <select id="queryByAppName" resultMap="AmpAppColonyRelEntity">
         select
         <include refid="Base_column_list"/>

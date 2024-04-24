@@ -13,7 +13,7 @@
         <result column="amp_no" property="ampNo"/>
         <result column="colony_name" property="colonyName"/>
         <result column="environment" property="environment"/>
-        <result column="application_name" property="applicationName"/>
+        <result column="app_name" property="appName"/>
         <result column="push_status" property="pushStatus"/>
         <result column="serial_no" property="serialNo"/>
         <result column="err_code" property="errCode"/>
@@ -30,7 +30,7 @@
         AMP_NO,
         COLONY_NAME,
         ENVIRONMENT,
-        APPLICATION_NAME,
+        APP_NAME,
         PUSH_STATUS,
         SERIAL_NO,
         ERR_CODE,
@@ -50,7 +50,7 @@
             AMP_NO,
             COLONY_NAME,
             ENVIRONMENT,
-            APPLICATION_NAME,
+            APP_NAME,
             PUSH_STATUS,
             SERIAL_NO,
             ERR_CODE,
@@ -64,7 +64,7 @@
             #{entity.ampNo},
             #{entity.colonyName},
             #{entity.environment},
-            #{entity.applicationName},
+            #{entity.appName},
             #{entity.pushStatus},
             #{entity.serialNo},
             #{entity.errCode},
@@ -82,7 +82,7 @@
             AMP_NO,
             COLONY_NAME,
             ENVIRONMENT,
-            APPLICATION_NAME,
+            APP_NAME,
             PUSH_STATUS,
             SERIAL_NO,
             ERR_CODE,
@@ -98,7 +98,7 @@
                 #{entity.ampNo},
                 #{entity.colonyName},
                 #{entity.environment},
-                #{entity.applicationName},
+                #{entity.appName},
                 #{entity.pushStatus},
                 #{entity.serialNo},
                 #{entity.errCode},

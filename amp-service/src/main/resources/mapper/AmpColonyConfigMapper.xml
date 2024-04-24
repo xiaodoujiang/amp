@@ -13,6 +13,7 @@
         <result column="colony_name" property="colonyName"/>
         <result column="config_key" property="configKey"/>
         <result column="config_value" property="configValue"/>
+        <result column="config_desc" property="configDesc"/>
         <result column="app_name" property="appName"/>
     </resultMap>
 
@@ -26,6 +27,7 @@
         COLONY_NAME,
         CONFIG_KEY,
         CONFIG_VALUE,
+        CONFIG_DESC,
         APP_NAME
     </sql>
 
@@ -34,26 +36,58 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         INSERT INTO AMP_COLONY_CONFIG(
-        CREATE_TIME,
-        UPDATE_TIME,
-        CREATE_AT,
-        UPDATE_AT,
-        UNIQUE_TOKEN,
-        COLONY_NAME,
-        CONFIG_KEY,
-        CONFIG_VALUE,
-        APP_NAME
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            COLONY_NAME,
+            CONFIG_KEY,
+            CONFIG_VALUE,
+            CONFIG_DESC,
+            APP_NAME
         ) VALUE(
-        NOW(),
-        NOW(),
-        'SYS',
-        'SYS',
-        0,
-        #{entity.colonyName},
-        #{entity.configKey},
-        #{entity.configValue},
-        #{entity.appName}
+            NOW(),
+            NOW(),
+            'SYS',
+            'SYS',
+            0,
+            #{entity.colonyName},
+            #{entity.configKey},
+            #{entity.configValue},
+            #{entity.configDesc},
+            #{entity.appName}
         )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO AMP_COLONY_CONFIG(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            COLONY_NAME,
+            CONFIG_KEY,
+            CONFIG_VALUE,
+            CONFIG_DESC,
+            APP_NAME
+        ) VALUES
+        <foreach collection="entityList" index="index" item="entity" separator=",">
+            (
+                NOW(),
+                NOW(),
+                'SYS',
+                'SYS',
+                0,
+                #{entity.colonyName},
+                #{entity.configKey},
+                #{entity.configValue},
+                #{entity.configDesc},
+                #{entity.appName}
+            )
+        </foreach>
+
     </insert>
 
     <select id="queryByKeyListAndColony" resultMap="AmpColonyConfigEntity">

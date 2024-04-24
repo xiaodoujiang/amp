@@ -16,8 +16,8 @@ public class ParamTest {
         envList.add("dev");
         envList.add("test");
         ampRecordRequestDTO.setEnvironmentList(envList);
-        ampRecordRequestDTO.setApplicationId(1L);
-        ampRecordRequestDTO.setApplicationName("TEST-1");
+        ampRecordRequestDTO.setAppId(1L);
+        ampRecordRequestDTO.setAppName("TEST-1");
         ampRecordRequestDTO.setAmpTaskRel("https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.32");
         ampRecordRequestDTO.setCreateUser("bmilk");
         ampRecordRequestDTO.setLaunchDate(new Date());

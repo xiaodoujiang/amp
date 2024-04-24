@@ -9,11 +9,11 @@ public class AmpConfigItemEntity extends BaseEntity {
     /**
      * 应用id
      */
-    private long applicationId;
+    private long appId;
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 配置项key
      */

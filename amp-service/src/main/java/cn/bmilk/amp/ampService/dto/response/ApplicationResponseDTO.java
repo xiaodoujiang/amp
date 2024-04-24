@@ -12,11 +12,11 @@ public class ApplicationResponseDTO {
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 应用描述
      */
-    private String applicationDesc;
+    private String appDesc;
 
     public static List<ApplicationResponseDTO> buildApplicationResponseDTOList(List<AmpApplicationEntity> ampApplicationEntityList){
         List<ApplicationResponseDTO> applicationResponseDTOList = new ArrayList<ApplicationResponseDTO>();
@@ -28,8 +28,8 @@ public class ApplicationResponseDTO {
 
     public static ApplicationResponseDTO buildApplicationResponseDTO(AmpApplicationEntity ampApplicationEntity){
         ApplicationResponseDTO ApplicationResponseDTO = new ApplicationResponseDTO();
-        ApplicationResponseDTO.setApplicationName(ampApplicationEntity.getApplicationName());
-        ApplicationResponseDTO.setApplicationDesc(ampApplicationEntity.getApplicationDesc());
+        ApplicationResponseDTO.setAppName(ampApplicationEntity.getAppName());
+        ApplicationResponseDTO.setAppDesc(ampApplicationEntity.getAppDesc());
         return ApplicationResponseDTO;
     }
 }

@@ -21,7 +21,7 @@ public class ApplicationService {
     }
 
     public List<ApplicationResponseDTO> queryAllApplication(){
-        List<AmpApplicationEntity> ampApplicationEntities = applicationMapper.queryAllApplication();
+        List<AmpApplicationEntity> ampApplicationEntities = applicationMapper.queryAllApp();
         return ApplicationResponseDTO.buildApplicationResponseDTOList(ampApplicationEntities);
     }
 

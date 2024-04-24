@@ -22,11 +22,11 @@ public class AmpRecordEntity extends BaseEntity {
     /**
      * 应用id
      */
-    private long applicationId;
+    private long appId;
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 项目描述
      */
@@ -62,8 +62,8 @@ public class AmpRecordEntity extends BaseEntity {
 
         ampRecordEntity.setAmpNo(ampNo);
         ampRecordEntity.setEnvironment(env);
-        ampRecordEntity.setApplicationId(ampRecordRequestDTO.getApplicationId());
-        ampRecordEntity.setApplicationName(ampRecordRequestDTO.getApplicationName());
+        ampRecordEntity.setAppId(ampRecordRequestDTO.getAppId());
+        ampRecordEntity.setAppName(ampRecordRequestDTO.getAppName());
         ampRecordEntity.setAmpDesc(ampRecordRequestDTO.getAmpDesc());
         ampRecordEntity.setAmpTaskRel(ampRecordRequestDTO.getAmpTaskRel());
         ampRecordEntity.setLaunchDate(ampRecordRequestDTO.getLaunchDate());

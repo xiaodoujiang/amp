@@ -8,11 +8,15 @@ public class AppDetailResponseDTO {
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 应用描述
      */
-    private String applicationDesc;
+    private String appDesc;
+    /**
+     * 应用类型
+     */
+    private String appType;
     /**
      * 应用请求地址KEY
      */
@@ -53,12 +57,19 @@ public class AppDetailResponseDTO {
 
     public static AppDetailResponseDTO build(AmpApplicationEntity entity){
         AppDetailResponseDTO result = new AppDetailResponseDTO();
-        result.setApplicationName(entity.getApplicationName());
-        result.setApplicationDesc(entity.getApplicationDesc());
+        result.setAppName(entity.getAppName());
+        result.setAppDesc(entity.getAppDesc());
+        result.setAppType(entity.getAppType());
         result.setAddressEnvKey(entity.getAddressEnvKey());
         result.setAddressEnvValue(entity.getAddressEnvValue());
         result.setPathEnvKey(entity.getPathEnvKey());
         result.setPathEnvValue(entity.getPathEnvValue());
+        result.setConfigFileType(entity.getConfigFileType());
+        result.setConfigCenterApp(entity.getConfigCenterApp());
+        result.setConfigGroup(entity.getConfigGroup());
+        result.setConfigTenant(entity.getConfigTenant());
+        result.setOperator(entity.getOperator());
         return result;
+
     }
 }

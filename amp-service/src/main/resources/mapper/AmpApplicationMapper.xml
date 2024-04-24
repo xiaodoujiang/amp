@@ -8,8 +8,9 @@
         <result column="create_at" property="createAt"/>
         <result column="update_at" property="updateAt"/>
         <result column="unique_token" property="uniqueToken"/>
-        <result column="application_name" property="applicationName"/>
-        <result column="application_desc" property="applicationDesc"/>
+        <result column="app_name" property="appName"/>
+        <result column="app_desc" property="appDesc"/>
+        <result column="APP_TYPE" property="appType"/>
         <result column="address_env_key" property="addressEnvKey"/>
         <result column="address_env_value" property="addressEnvValue"/>
         <result column="path_env_key" property="pathEnvKey"/>
@@ -28,8 +29,9 @@
         CREATE_AT,
         UPDATE_AT,
         UNIQUE_TOKEN,
-        APPLICATION_NAME,
-        APPLICATION_DESC,
+        APP_NAME,
+        APP_DESC,
+        APP_TYPE,
         ADDRESS_ENV_KEY,
         ADDRESS_ENV_VALUE,
         PATH_ENV_KEY,
@@ -51,8 +53,9 @@
             CREATE_AT,
             UPDATE_AT,
             UNIQUE_TOKEN,
-            APPLICATION_NAME,
-            APPLICATION_DESC,
+            APP_NAME,
+            APP_DESC,
+            APP_TYPE,
             ADDRESS_ENV_KEY,
             ADDRESS_ENV_VALUE,
             PATH_ENV_KEY,
@@ -68,8 +71,9 @@
             'SYS',
             'SYS',
             0,
-            #{entity.applicationName},
-            #{entity.applicationDesc},
+            #{entity.appName},
+            #{entity.appDesc},
+            #{entity.appType},
             #{entity.addressEnvKey},
             #{entity.addressEnvValue},
             #{entity.pathEnvKey},
@@ -82,7 +86,7 @@
         )
     </insert>
 
-    <select id="queryAllApplication" resultType="java.util.List">
+    <select id="queryAllApp" resultType="java.util.List">
         select
             <include refid="Base_column_list"/>
         from AMP_APPLICATION
@@ -93,7 +97,7 @@
         select
         <include refid="Base_column_list"/>
         from AMP_APPLICATION
-        where UNIQUE_TOKEN = 0 and APPLICATION_NAME = #{appName}
+        where UNIQUE_TOKEN = 0 and APP_NAME = #{appName}
     </select>
 
 </mapper>

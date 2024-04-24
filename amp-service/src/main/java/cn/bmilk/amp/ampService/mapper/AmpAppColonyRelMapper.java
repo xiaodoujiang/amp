@@ -16,6 +16,12 @@ public interface AmpAppColonyRelMapper {
     void insert(@Param("entity") AmpAppColonyRelEntity ampAppColonyRelEntity);
 
     /**
+     * 批量插入
+     * @param appColonyRelEntityList
+     */
+    void batchInsert(@Param("entityList") List<AmpAppColonyRelEntity> appColonyRelEntityList);
+
+    /**
      * 根据app名称查询集群绑定关系
      * @param appName
      * @return

@@ -12,8 +12,8 @@
         <result column="unique_token" property="uniqueToken"/>
         <result column="amp_no" property="ampNo"/>
         <result column="environment" property="environment"/>
-        <result column="application_id" property="applicationId"/>
-        <result column="application_name" property="applicationName"/>
+        <result column="app_id" property="appId"/>
+        <result column="app_name" property="appName"/>
         <result column="amp_desc" property="ampDesc"/>
         <result column="amp_task_rel" property="ampTaskRel"/>
         <result column="launch_date" property="launchDate"/>
@@ -32,8 +32,8 @@
         UNIQUE_TOKEN,
         AMP_NO,
         ENVIRONMENT,
-        APPLICATION_ID,
-        APPLICATION_NAME,
+        APP_ID,
+        APP_NAME,
         AMP_DESC,
         AMP_TASK_REL,
         LAUNCH_DATE,
@@ -55,8 +55,8 @@
             UNIQUE_TOKEN,
             AMP_NO,
             ENVIRONMENT,
-            APPLICATION_ID,
-            APPLICATION_NAME,
+            APP_ID,
+            APP_NAME,
             AMP_DESC,
             AMP_TASK_REL,
             LAUNCH_DATE,
@@ -72,8 +72,8 @@
             0,
             #{entity.ampNo},
             #{entity.environment},
-            #{entity.applicationId},
-            #{entity.applicationName},
+            #{entity.appId},
+            #{entity.appName},
             #{entity.ampDesc},
             #{entity.ampTaskRel},
             #{entity.launchDate},
@@ -93,8 +93,8 @@
             UNIQUE_TOKEN,
             AMP_NO,
             ENVIRONMENT,
-            APPLICATION_ID,
-            APPLICATION_NAME,
+            APP_ID,
+            APP_NAME,
             AMP_DESC,
             AMP_TASK_REL,
             LAUNCH_DATE,
@@ -112,8 +112,8 @@
                 0,
                 #{entity.ampNo},
                 #{entity.environment},
-                #{entity.applicationId},
-                #{entity.applicationName},
+                #{entity.appId},
+                #{entity.appName},
                 #{entity.ampDesc},
                 #{entity.ampTaskRel},
                 #{entity.launchDate},

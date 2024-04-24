@@ -53,7 +53,7 @@ public class NacosPushService implements AmpPushService {
             return false;
         }
         // 查询应用的所有配置项
-        List<AmpConfigItemEntity> configItemList = ampConfigItemMapper.queryByAppNameAndEnv(ampApplicationEntity.getApplicationName(),
+        List<AmpConfigItemEntity> configItemList = ampConfigItemMapper.queryByAppNameAndEnv(ampApplicationEntity.getAppName(),
                 ampPushRecordEntity.getEnvironment());
         // 对于非基础配置依赖根据不同集群进行转换
         assemblyParamConvert(configItemList, ampPushRecordEntity);

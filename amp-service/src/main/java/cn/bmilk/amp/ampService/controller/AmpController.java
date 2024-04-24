@@ -111,8 +111,8 @@ public class AmpController {
         if (null == recordRequestDTO.getEnvironmentList() || recordRequestDTO.getEnvironmentList().isEmpty()) {
             sb.append("EnvironmentList is null");
         }
-        if (null == recordRequestDTO.getApplicationId()) {
-            sb.append("ApplicationId is null");
+        if (StringUtils.isBlank(recordRequestDTO.getAppName())) {
+            sb.append("AppName is null");
         }
         if (StringUtils.isBlank(recordRequestDTO.getCreateUser())) {
             sb.append("CreateUser is null");

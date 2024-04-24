@@ -77,8 +77,8 @@ public class AmpTransactionalService {
         List<AmpConfigItemEntity> result = new ArrayList<>();
         for (AmpConfigItemTmpEntity ampConfigItemTmpEntity : ampConfigItemTmpEntityList) {
             AmpConfigItemEntity ampConfigItemEntity = new AmpConfigItemEntity();
-            ampConfigItemEntity.setApplicationId(ampRecordEntity.getApplicationId());
-            ampConfigItemEntity.setApplicationName(ampRecordEntity.getApplicationName());
+            ampConfigItemEntity.setAppId(ampRecordEntity.getAppId());
+            ampConfigItemEntity.setAppName(ampRecordEntity.getAppName());
             ampConfigItemEntity.setConfigKey(ampConfigItemTmpEntity.getConfigKey());
             ampConfigItemEntity.setConfigValue(ampConfigItemTmpEntity.getConfigValue());
             ampConfigItemEntity.setConfigDesc(ampConfigItemTmpEntity.getConfigDesc());
@@ -96,7 +96,7 @@ public class AmpTransactionalService {
             AmpPushRecordEntity ampPushRecordEntity = new AmpPushRecordEntity();
             ampPushRecordEntity.setAmpNo(ampRecordEntity.getAmpNo());
             ampPushRecordEntity.setEnvironment(ampRecordEntity.getEnvironment());
-            ampPushRecordEntity.setApplicationName(ampRecordEntity.getApplicationName());
+            ampPushRecordEntity.setAppName(ampRecordEntity.getAppName());
             ampPushRecordEntity.setColonyName(colony);
             ampPushRecordEntity.setPushStatus(AmpPushStatusEnum.NEW.name());
             ampPushRecordEntity.setSerialNo("PUSH-"+System.currentTimeMillis() + "colony");

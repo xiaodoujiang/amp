@@ -22,7 +22,7 @@ public class AmpPushRecordEntity extends BaseEntity{
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 推送状态
      */

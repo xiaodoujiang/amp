@@ -21,7 +21,7 @@ public class AmpPushResponseDTO {
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 项目描述
      */
@@ -42,7 +42,7 @@ public class AmpPushResponseDTO {
         result.setAmpNo(ampRecordEntity.getAmpNo());
         result.setAmpStatus(ampRecordEntity.getStatus());
         result.setEnvironment(ampRecordEntity.getEnvironment());
-        result.setApplicationName(ampRecordEntity.getApplicationName());
+        result.setAppName(ampRecordEntity.getAppName());
         return  result;
     }
 }

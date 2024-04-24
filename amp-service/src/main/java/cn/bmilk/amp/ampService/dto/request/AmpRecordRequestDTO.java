@@ -21,11 +21,11 @@ public class AmpRecordRequestDTO {
     /**
      * 应用id
      */
-    private Long applicationId;
+    private Long appId;
     /**
      * 应用名称
      */
-    private String applicationName;
+    private String appName;
     /**
      * 项目描述
      */

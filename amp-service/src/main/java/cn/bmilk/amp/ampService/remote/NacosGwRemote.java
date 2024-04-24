@@ -100,7 +100,7 @@ public class NacosGwRemote {
         pushConfigurationRequestDTO.setFileType(ampApplicationEntity.getConfigFileType());
         pushConfigurationRequestDTO.setEnv(ampPushRecordEntity.getEnvironment());
         pushConfigurationRequestDTO.setGroup(ampApplicationEntity.getConfigGroup());
-        pushConfigurationRequestDTO.setServerName(ampApplicationEntity.getApplicationName());
+        pushConfigurationRequestDTO.setServerName(ampApplicationEntity.getAppName());
         pushConfigurationRequestDTO.setSerialNo(ampPushRecordEntity.getSerialNo());
         pushConfigurationRequestDTO.setConfigurationDTOList(configurationDTOList);
 

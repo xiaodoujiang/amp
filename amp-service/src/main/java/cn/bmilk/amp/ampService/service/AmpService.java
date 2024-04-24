@@ -111,12 +111,12 @@ public class AmpService {
         if (null == colonyList || colonyList.isEmpty()) {
             List<AmpColonyEntity> ampColonyEntitieList = ampColonyMapper.queryListByEnv(ampRecordEntity.getEnvironment());
             if(null == ampColonyEntitieList || ampColonyEntitieList.isEmpty()) {
-                log.error("can not find push colony, ampNo[{}],appName[{}],env[{}]", ampNo, ampRecordEntity.getApplicationName(),
+                log.error("can not find push colony, ampNo[{}],appName[{}],env[{}]", ampNo, ampRecordEntity.getAppName(),
                         ampRecordEntity.getEnvironment());
                 throw new IllegalArgumentException("cant not find push colony");
             }
             colonyList = ampColonyEntitieList.stream().map(AmpColonyEntity::getColonyName).collect(Collectors.toList());
-            List<AmpAppColonyRelEntity> ampAppEnvRelEntitieList = ampAppColonyRelMapper.queryByAppNameAndColony(ampRecordEntity.getApplicationName(),
+            List<AmpAppColonyRelEntity> ampAppEnvRelEntitieList = ampAppColonyRelMapper.queryByAppNameAndColony(ampRecordEntity.getAppName(),
                     colonyList);
             colonyList = ampAppEnvRelEntitieList.stream().map(AmpAppColonyRelEntity::getColonyName).collect(Collectors.toList());
         }
@@ -135,7 +135,7 @@ public class AmpService {
 
     public boolean push(long recordId) {
         AmpPushRecordEntity ampPushRecordEntity = ampPushRecordMapper.queryById(recordId);
-        AmpApplicationEntity ampApplicationEntity = ampApplicationMapper.queryByAppName(ampPushRecordEntity.getApplicationName());
+        AmpApplicationEntity ampApplicationEntity = ampApplicationMapper.queryByAppName(ampPushRecordEntity.getAppName());
         AmpPushService ampPushService = ampPushServiceMap.get(ampApplicationEntity.getConfigCenterApp());
         if (ampPushService == null) {
             // todo 抛出异常
@@ -153,8 +153,8 @@ public class AmpService {
         result.setAmpNo(ampRecordEntity.getAmpNo());
         result.setAmpDesc(ampRecordEntity.getAmpDesc());
         result.setAmpTaskRel(ampRecordEntity.getAmpTaskRel());
-        result.setApplicationId(ampRecordEntity.getApplicationId());
-        result.setApplicationName(ampRecordEntity.getApplicationName());
+        result.setAppId(ampRecordEntity.getAppId());
+        result.setAppName(ampRecordEntity.getAppName());
         result.setEnvironment(ampRecordEntity.getEnvironment());
         result.setAmpStatus(ampRecordEntity.getStatus());
         result.setAmpDesc(ampRecordEntity.getAmpDesc());

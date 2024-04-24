@@ -19,7 +19,7 @@ public interface AmpApplicationMapper {
      * 查询所有应用
      * @return 应用列表 {@link AmpApplicationEntity}
      */
-    List<AmpApplicationEntity> queryAllApplication();
+    List<AmpApplicationEntity> queryAllApp();
 
     /**
      * 查询应用详情
