@@ -2,21 +2,21 @@ package cn.bmilk.amp.ampService.service.push;
 
 import cn.bmilk.amp.ampService.common.AmpPushStatusEnum;
 import cn.bmilk.amp.ampService.common.ConfigTypeEnum;
-import cn.bmilk.amp.ampService.dto.ConfigCenterDetailDTO;
 import cn.bmilk.amp.ampService.mapper.*;
 import cn.bmilk.amp.ampService.mapper.entity.*;
 import cn.bmilk.amp.ampService.remote.NacosGwRemote;
-import cn.bmilk.amp.ampService.service.AmpPushService;
+import cn.bmilk.amp.ampService.service.AppConfigService;
 import cn.bmilk.amp.ampService.service.ConfigCenterService;
+import cn.bmilk.amp.gwcommon.ConfigurationDTO;
 import cn.bmilk.amp.gwcommon.common.StatusEnum;
-import cn.bmilk.amp.gwcommon.response.LoginResponseDTO;
 import cn.bmilk.amp.gwcommon.response.PushConfigResponseDTO;
+import cn.bmilk.amp.gwcommon.response.QueryConfigResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service("nacos")
-public class NacosPushService implements AmpPushService {
+public class NacosConfigCenterService implements AppConfigService {
 
     @Resource
     private NacosGwRemote nacosGwRemote;
@@ -64,6 +64,16 @@ public class NacosPushService implements AmpPushService {
                 pushConfigResponseDTO.getStatus(), pushConfigResponseDTO.getErrCode(), pushConfigResponseDTO.getErrMsg());
         // 返回推送结果
         return StatusEnum.SUCCESS.name().equals(pushConfigResponseDTO.getStatus());
+    }
+
+    @Override
+    public Map<String, String> queryAppConfig(AmpApplicationEntity ampApplicationEntity, String colonyName, String env) {
+        QueryConfigResponseDTO queryConfigResponseDTO = nacosGwRemote.queryConfigList(ampApplicationEntity, colonyName, env);
+        Map<String, String> result = new LinkedHashMap<>();
+        for (ConfigurationDTO configurationDTO : queryConfigResponseDTO.getConfigurationDTOList()){
+            result.put(configurationDTO.getKey(), configurationDTO.getValue());
+        }
+        return result;
     }
 
 

@@ -2,11 +2,13 @@ package cn.bmilk.amp.ampService.controller;
 
 import cn.bmilk.amp.ampService.dto.request.ApplicationRequestDTO;
 import cn.bmilk.amp.ampService.dto.response.AppDetailResponseDTO;
+import cn.bmilk.amp.ampService.dto.response.ApplicationResponseDTO;
 import cn.bmilk.amp.ampService.dto.response.BaseResponseDTO;
 import cn.bmilk.amp.ampService.service.AppService;
 import cn.bmilk.amp.gwcommon.response.ResponseCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -54,8 +56,29 @@ public class AppController {
             log.error("AppController bindAppColony exception, requestDTO[{}], errMsg[{}]", requestDTO, e.getMessage(), e);
             return BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
+    }
+
+    @GetMapping("/config/list")
+    public BaseResponseDTO queryAppConfigList(@RequestParam(name = "appName") String appName,
+                                              @RequestParam(name = "env") String env,
+                                              @RequestParam(name = "colonyName") String colonyName){
+
+        log.info("AppController queryAppConfigList start, appName[{}], env[{}], colonyName[{}]", appName, env, colonyName);
+        BaseResponseDTO responseDTO = null;
+        try {
+            responseDTO =  BaseResponseDTO.SUCCESS(appService.queryAppConfigList(appName, env, colonyName));
+        }catch (Exception e){
+            log.info("AppController queryAppConfigList error, appName[{}], env[{}], colonyName[{}], errMsg[{}]",
+                    appName, env, colonyName, e.getMessage(), e);
+            responseDTO =  BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
+        }finally {
+            log.info("AppController queryAppConfigList end, appName[{}], env[{}], colonyName[{}], responseDTO[{}]",
+                    appName, env, colonyName, responseDTO);
+        }
+        return responseDTO;
 
     }
+
 
 
     private String createAppVerify(ApplicationRequestDTO requestDTO){

@@ -3,7 +3,7 @@ package cn.bmilk.amp.ampService.controller;
 import cn.bmilk.amp.ampService.common.StatusEnum;
 import cn.bmilk.amp.ampService.dto.request.AmpPushRequestDTO;
 import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
-import cn.bmilk.amp.ampService.dto.response.AmpPushResponseDTO;
+import cn.bmilk.amp.ampService.dto.response.PushAmpResponseDTO;
 import cn.bmilk.amp.ampService.dto.response.AmpRecordResponseDTO;
 import cn.bmilk.amp.ampService.dto.response.BaseResponseDTO;
 import cn.bmilk.amp.ampService.service.AmpService;
@@ -78,8 +78,8 @@ public class AmpController {
             if(StringUtils.isNotBlank(verify)){
                 return BaseResponseDTO.FAILURE(ResponseCodeEnum.PARAMS_ERROR, verify);
             }
-            AmpPushResponseDTO ampPushResponseDTO = ampService.recordPush(ampPushRequestDTO);
-            baseResponseDTO = BaseResponseDTO.SUCCESS(ampPushResponseDTO);
+            PushAmpResponseDTO pushAmpResponseDTO = ampService.recordPush(ampPushRequestDTO);
+            baseResponseDTO = BaseResponseDTO.SUCCESS(pushAmpResponseDTO);
         }catch (Exception e){
             log.error("push amp error, ampPushRequestDTO[{}], errMsg[{}]", ampPushRequestDTO, e.getMessage(), e);
             baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
@@ -91,8 +91,8 @@ public class AmpController {
     public BaseResponseDTO queryPushDetail(@RequestParam(value = "ampNo") String ampNo){
         BaseResponseDTO baseResponseDTO = null;
         try {
-            AmpPushResponseDTO ampPushResponseDTO = ampService.queryPushDetail(ampNo);
-            baseResponseDTO = BaseResponseDTO.SUCCESS(ampPushResponseDTO);
+            PushAmpResponseDTO pushAmpResponseDTO = ampService.queryPushDetail(ampNo);
+            baseResponseDTO = BaseResponseDTO.SUCCESS(pushAmpResponseDTO);
         }catch (Exception e){
             log.error("queryPushDetail  error, ampNo[{}], errMsg[{}]", ampNo, e.getMessage(), e);
             baseResponseDTO = BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());

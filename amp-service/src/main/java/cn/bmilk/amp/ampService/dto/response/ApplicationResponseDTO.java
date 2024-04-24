@@ -1,5 +1,6 @@
 package cn.bmilk.amp.ampService.dto.response;
 
+import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
 import cn.bmilk.amp.ampService.mapper.entity.AmpApplicationEntity;
 import lombok.Data;
 
@@ -18,6 +19,8 @@ public class ApplicationResponseDTO {
      */
     private String appDesc;
 
+    private List<ConfigDetailDTO> configDetailDTOList;
+
     public static List<ApplicationResponseDTO> buildApplicationResponseDTOList(List<AmpApplicationEntity> ampApplicationEntityList){
         List<ApplicationResponseDTO> applicationResponseDTOList = new ArrayList<ApplicationResponseDTO>();
         for (AmpApplicationEntity ampApplicationEntity : ampApplicationEntityList){
@@ -32,4 +35,6 @@ public class ApplicationResponseDTO {
         ApplicationResponseDTO.setAppDesc(ampApplicationEntity.getAppDesc());
         return ApplicationResponseDTO;
     }
+
+
 }

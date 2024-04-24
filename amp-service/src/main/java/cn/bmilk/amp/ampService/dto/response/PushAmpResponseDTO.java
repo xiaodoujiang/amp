@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AmpPushResponseDTO {
+public class PushAmpResponseDTO {
     /**
      * amp单号
      */
@@ -37,8 +37,8 @@ public class AmpPushResponseDTO {
      */
     private List<ConfigPushDetailDTO> configPushDetailDTOList;
 
-    public static AmpPushResponseDTO build(AmpRecordEntity ampRecordEntity){
-        AmpPushResponseDTO result = new AmpPushResponseDTO();
+    public static PushAmpResponseDTO build(AmpRecordEntity ampRecordEntity){
+        PushAmpResponseDTO result = new PushAmpResponseDTO();
         result.setAmpNo(ampRecordEntity.getAmpNo());
         result.setAmpStatus(ampRecordEntity.getStatus());
         result.setEnvironment(ampRecordEntity.getEnvironment());
