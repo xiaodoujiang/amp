@@ -2,22 +2,23 @@ package cn.bmilk.amp.ampService.task;
 
 import cn.bmilk.amp.ampService.config.SpringBeanUtils;
 import cn.bmilk.amp.ampService.service.AmpService;
+import cn.bmilk.amp.ampService.service.AppConfigService;
 
 public class ConfigPushTask implements Runnable{
 
     private long id;
 
-    private AmpService ampService;
+    private AppConfigService appConfigService;
 
     public ConfigPushTask(long id) {
         this.id = id;
-        ampService = SpringBeanUtils.getBean("ampService", AmpService.class);
+        appConfigService = SpringBeanUtils.getBean("appConfigService", AppConfigService.class);
     }
 
 
     @Override
     public void run() {
-        ampService.push(id);
+        appConfigService.push(id);
     }
 
     @Override

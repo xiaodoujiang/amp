@@ -1,12 +1,7 @@
 package cn.bmilk.amp.ampService.service;
 
-import cn.bmilk.amp.ampService.common.AmpPushStatusEnum;
+import cn.bmilk.amp.ampService.common.CommonStatusEnum;
 import cn.bmilk.amp.ampService.common.AmpStatusEnum;
-import cn.bmilk.amp.ampService.common.ConfigTypeEnum;
-import cn.bmilk.amp.ampService.common.ConfigUpdateTypeEnum;
-import cn.bmilk.amp.ampService.dto.request.AmpRecordRequestDTO;
-import cn.bmilk.amp.ampService.dto.ConfigDetailDTO;
-import cn.bmilk.amp.ampService.exception.OptimisticLockingException;
 import cn.bmilk.amp.ampService.mapper.AmpConfigItemMapper;
 import cn.bmilk.amp.ampService.mapper.AmpConfigItemTmpMapper;
 import cn.bmilk.amp.ampService.mapper.AmpPushRecordMapper;
@@ -16,14 +11,12 @@ import cn.bmilk.amp.ampService.mapper.entity.AmpConfigItemTmpEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpPushRecordEntity;
 import cn.bmilk.amp.ampService.mapper.entity.AmpRecordEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -98,7 +91,7 @@ public class AmpTransactionalService {
             ampPushRecordEntity.setEnvironment(ampRecordEntity.getEnvironment());
             ampPushRecordEntity.setAppName(ampRecordEntity.getAppName());
             ampPushRecordEntity.setColonyName(colony);
-            ampPushRecordEntity.setPushStatus(AmpPushStatusEnum.NEW.name());
+            ampPushRecordEntity.setPushStatus(CommonStatusEnum.NEW.name());
             ampPushRecordEntity.setSerialNo("PUSH-"+System.currentTimeMillis() + "colony");
             result.add(ampPushRecordEntity);
         }

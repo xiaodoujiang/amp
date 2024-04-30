@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bmilk.amp.ampService.mapper.AmpConfigSyncRecordMapper">
+    <resultMap id = "AmpConfigSyncRecordEntity" type = "cn.bmilk.amp.ampService.mapper.entity.AmpConfigSyncRecordEntity">
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="unique_token" property="uniqueToken"/>
+        <result column="APP_NAME" property="APPNAME"/>
+        <result column="ENVIRONMENT" property="ENVIRONMENT"/>
+        <result column="COLONY_NAME" property="COLONYNAME"/>
+        <result column="STATUS" property="STATUS"/>
+    </resultMap>
+
+    <sql id="Base_column_list">
+        ID,
+        CREATE_TIME,
+        UPDATE_TIME,
+        CREATE_AT,
+        UPDATE_AT,
+        UNIQUE_TOKEN,
+        APP_NAME,
+        ENVIRONMENT,
+        COLONY_NAME,
+        STATUS
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO AMP_COLONY_SYNC_RECORD(
+            CREATE_TIME,
+            UPDATE_TIME,
+            CREATE_AT,
+            UPDATE_AT,
+            UNIQUE_TOKEN,
+            APP_NAME,
+            ENVIRONMENT,
+            COLONY_NAME,
+            STATUS
+        ) VALUES
+        <foreach collection="entityList" index="index" item="entity" separator=",">
+            (
+                NOW(),
+                NOW(),
+                'SYS',
+                'SYS',
+                0,
+                #{entity.APPNAME},
+                #{entity.ENVIRONMENT},
+                #{entity.COLONYNAME},
+                #{entity.STATUS}
+            )
+        </foreach>
+
+    </insert>
+
+    <select id="queryById" resultMap="AmpConfigSyncRecordEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_CONFIG_ITEM_TMP
+        where AMP_NO = #{ampNo} and UNIQUE_TOKEN=0
+    </select>
+
+</mapper>

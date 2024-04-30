@@ -1,14 +1,14 @@
 package cn.bmilk.amp.ampService.common;
 
-public enum AmpPushStatusEnum {
+public enum CommonStatusEnum {
     NEW("新建"),
     PROCESSING("处理中"),
-    SUCCESS("推送成功"),
-    FAILURE("推送失败"),
+    SUCCESS("成功"),
+    FAILURE("失败"),
     ;
     private String desc;
 
-    AmpPushStatusEnum(String desc) {
+    CommonStatusEnum(String desc) {
         this.desc = desc;
     }
 }

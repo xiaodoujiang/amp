@@ -58,4 +58,11 @@
         from AMP_COLONY
         where ENVIRONMENT = #{env} and UNIQUE_TOKEN=0
     </select>
+
+    <select id="queryByName" resultMap="AmpColonyEntity">
+        select
+        <include refid="Base_column_list"/>
+        from AMP_COLONY
+        where COLONY_NAME = #{colonyName}
+    </select>
 </mapper>

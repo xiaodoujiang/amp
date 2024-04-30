@@ -21,5 +21,12 @@ public interface AmpColonyMapper {
      */
     List<AmpColonyEntity> queryListByEnv(@Param("env") String env);
 
+    /**
+     * 根据集群名称查询集群详情
+     * @param colonyName
+     * @return
+     */
+    AmpColonyEntity queryByName(@Param("colonyName") String colonyName);
+
 
 }

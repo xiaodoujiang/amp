@@ -7,7 +7,7 @@ CREATE TABLE `AMP_CONFIG_ITEM` (
     `UNIQUE_TOKEN` bigint(20) NOT NULL DEFAULT '0' COMMENT '是否删除，0-未删除，其他-删除',
     `APP_ID` bigint(20) NOT NULL COMMENT '应用ID',
     `APP_NAME` varchar(64) NOT NULL COMMENT '应用名称',
-    `ENVIRONMENT` varchar(256) NOT NULL COMMENT '环境',
+    `ENVIRONMENT` varchar(32) NOT NULL COMMENT '环境',
     `CONFIG_KEY` varchar(128) NOT NULL COMMENT '配置项KEY',
     `CONFIG_VALUE` varchar(1024) NOT NULL COMMENT '配置项VALUE',
     `CONFIG_TYPE` varchar(32) NOT NULL COMMENT '配置项类型',

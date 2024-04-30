@@ -1,31 +1,34 @@
 package cn.bmilk.amp.ampService.service.push;
 
-import cn.bmilk.amp.ampService.common.AmpPushStatusEnum;
 import cn.bmilk.amp.ampService.common.ConfigTypeEnum;
+import cn.bmilk.amp.ampService.dto.ConfigCenterDetailDTO;
 import cn.bmilk.amp.ampService.mapper.*;
 import cn.bmilk.amp.ampService.mapper.entity.*;
 import cn.bmilk.amp.ampService.remote.NacosGwRemote;
-import cn.bmilk.amp.ampService.service.AppConfigService;
 import cn.bmilk.amp.ampService.service.ConfigCenterService;
 import cn.bmilk.amp.gwcommon.ConfigurationDTO;
 import cn.bmilk.amp.gwcommon.common.StatusEnum;
+import cn.bmilk.amp.gwcommon.response.LoginResponseDTO;
 import cn.bmilk.amp.gwcommon.response.PushConfigResponseDTO;
 import cn.bmilk.amp.gwcommon.response.QueryConfigResponseDTO;
+import cn.bmilk.tools.utils.GsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.xml.ws.Action;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * nacos做配置中心
  */
 @Slf4j
 @Service("nacos")
-public class NacosConfigCenterService implements AppConfigService {
+public class NacosConfigCenterService implements ConfigCenterService {
 
     @Resource
     private NacosGwRemote nacosGwRemote;
@@ -42,40 +45,49 @@ public class NacosConfigCenterService implements AppConfigService {
     @Resource
     private ConfigCenterService configCenterService;
 
-
-    public boolean push(AmpPushRecordEntity ampPushRecordEntity,
-                        AmpApplicationEntity ampApplicationEntity){
-        // 乐观锁更新
-        int count = ampPushRecordMapper.updateStatus(ampPushRecordEntity.getId(), AmpPushStatusEnum.NEW.name(),
-                AmpPushStatusEnum.PROCESSING.name(), null, null);
-        if(count != 1){
-            // todo  日志
-            return false;
-        }
+    @Override
+    public PushConfigResponseDTO push(AmpPushRecordEntity ampPushRecordEntity,
+                                      AmpApplicationEntity ampApplicationEntity,
+                                      ConfigCenterDetailDTO configCenterDetailDTO) {
         // 查询应用的所有配置项
         List<AmpConfigItemEntity> configItemList = ampConfigItemMapper.queryByAppNameAndEnv(ampApplicationEntity.getAppName(),
                 ampPushRecordEntity.getEnvironment());
         // 对于非基础配置依赖根据不同集群进行转换
         assemblyParamConvert(configItemList, ampPushRecordEntity);
         // 推送
-        PushConfigResponseDTO pushConfigResponseDTO = nacosGwRemote.pushConfig(ampPushRecordEntity, ampApplicationEntity, configItemList);
-        // 更新推送状态
-        ampPushRecordMapper.updateStatus(ampPushRecordEntity.getId(), AmpPushStatusEnum.PROCESSING.name(),
-                pushConfigResponseDTO.getStatus(), pushConfigResponseDTO.getErrCode(), pushConfigResponseDTO.getErrMsg());
-        // 返回推送结果
-        return StatusEnum.SUCCESS.name().equals(pushConfigResponseDTO.getStatus());
+        return nacosGwRemote.pushConfig(ampPushRecordEntity, ampApplicationEntity, configItemList, configCenterDetailDTO);
     }
 
     @Override
-    public Map<String, String> queryAppConfig(AmpApplicationEntity ampApplicationEntity, String colonyName, String env) {
-        QueryConfigResponseDTO queryConfigResponseDTO = nacosGwRemote.queryConfigList(ampApplicationEntity, colonyName, env);
-        Map<String, String> result = new LinkedHashMap<>();
-        for (ConfigurationDTO configurationDTO : queryConfigResponseDTO.getConfigurationDTOList()){
-            result.put(configurationDTO.getKey(), configurationDTO.getValue());
-        }
-        return result;
+    public List<ConfigurationDTO> queryConfigList(AmpApplicationEntity ampApplicationEntity,
+                                                  ConfigCenterDetailDTO configCenterDetailDTO,
+                                                  String env) {
+        QueryConfigResponseDTO queryConfigResponseDTO = nacosGwRemote.queryConfigList(ampApplicationEntity, configCenterDetailDTO, env);
+        return queryConfigResponseDTO.getConfigurationDTOList();
     }
 
+    @Override
+    public LoginResponseDTO login(String username, String password, String requestAddress, String requestPath) {
+        return nacosGwRemote.login(username, password, requestAddress, requestPath);
+    }
+
+    @Override
+    public ConfigCenterDetailDTO queryConfigCenterDetail(String colonyName, String centerName){
+        List<AmpColonyConfigEntity> ampColonyConfigEntityList = ampColonyConfigMapper.queryByAppAndColony(centerName, colonyName);
+
+        ConfigCenterDetailDTO result = new ConfigCenterDetailDTO();
+
+        if(null == ampColonyConfigEntityList || ampColonyConfigEntityList.isEmpty()){
+            return result;
+        }
+        Map<String, AmpColonyConfigEntity> collect = ampColonyConfigEntityList.stream().collect(Collectors.toMap(AmpColonyConfigEntity::getConfigKey, Function.identity()));
+        String upperCase = centerName.toUpperCase();
+        result.setRequestAddress(collect.get(String.format(CONFIG_CENTER_ADDRESS_FORMAT, upperCase)).getConfigValue());
+        result.setRequestPath(collect.get(String.format(CONFIG_CENTER_PATH_FORMAT, upperCase)).getConfigValue());
+        result.setUserName(collect.get(String.format(CONFIG_CENTER_USERNAME_FORMAT, upperCase)).getConfigValue());
+        result.setPassword(collect.get(String.format(CONFIG_CENTER_PASSWORD_FORMAT, upperCase)).getConfigValue());
+        return  result;
+    }
 
     private void assemblyParamConvert(List<AmpConfigItemEntity> configItemList,
                                       AmpPushRecordEntity ampPushRecordEntity){

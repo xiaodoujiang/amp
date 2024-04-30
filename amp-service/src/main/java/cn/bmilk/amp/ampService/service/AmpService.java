@@ -48,6 +48,8 @@ public class AmpService {
 
     @Resource
     private AmpColonyMapper ampColonyMapper;
+    @Resource
+    private AmpConfigSyncRecordMapper configSyncRecordMapper;
 
     @Transactional
     public List<AmpRecordResponseDTO> createAmp(AmpRecordRequestDTO requestDTO) {
@@ -133,16 +135,9 @@ public class AmpService {
         return buildAmpPushResponseDTO(ampRecordEntity, ampPushRecordEntitieList);
     }
 
-    public boolean push(long recordId) {
-        AmpPushRecordEntity ampPushRecordEntity = ampPushRecordMapper.queryById(recordId);
-        AmpApplicationEntity ampApplicationEntity = ampApplicationMapper.queryByAppName(ampPushRecordEntity.getAppName());
-        AppConfigService appConfigService = ampPushServiceMap.get(ampApplicationEntity.getConfigCenterApp());
-        if (appConfigService == null) {
-            // todo 抛出异常
-            throw new RuntimeException();
-        }
-        return appConfigService.push(ampPushRecordEntity, ampApplicationEntity);
-    }
+
+
+
 
     private AmpRecordResponseDTO buildAmpRecordResponseDTO(AmpRecordEntity ampRecordEntity,
                                                            List<AmpConfigItemTmpEntity> configItemList) {

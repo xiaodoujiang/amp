@@ -57,11 +57,11 @@ public class NacosGwRemote {
 
     public PushConfigResponseDTO pushConfig(AmpPushRecordEntity ampPushRecordEntity,
                                             AmpApplicationEntity ampApplicationEntity,
-                                            List<AmpConfigItemEntity> configItemEntityList) {
+                                            List<AmpConfigItemEntity> configItemEntityList,
+                                            ConfigCenterDetailDTO configCenterDetailDTO) {
         PushConfigResponseDTO pushConfigResponseDTO;
         GwRequestDTO gwRequestDTO = null;
         try {
-            ConfigCenterDetailDTO configCenterDetailDTO = configCenterService.login(ampPushRecordEntity.getColonyName(), CONFIG_CENTER_TYPE);
             gwRequestDTO = buildPushConfigurationRequestDTO(configCenterDetailDTO, ampPushRecordEntity, ampApplicationEntity, configItemEntityList);
             String responseStr = nacosGwClient.distribute(gwRequestDTO);
             pushConfigResponseDTO = GsonUtils.fromJson(responseStr, PushConfigResponseDTO.class);
@@ -74,12 +74,11 @@ public class NacosGwRemote {
     }
 
     public QueryConfigResponseDTO queryConfigList(AmpApplicationEntity ampApplicationEntity,
-                                                  String colonyName,
+                                                  ConfigCenterDetailDTO configCenterDetailDTO,
                                                   String env) {
         QueryConfigResponseDTO pushConfigResponseDTO;
         GwRequestDTO gwRequestDTO = null;
         try {
-            ConfigCenterDetailDTO configCenterDetailDTO = configCenterService.login(colonyName, CONFIG_CENTER_TYPE);
             gwRequestDTO = buildQueryConfigRequestDTO(ampApplicationEntity, configCenterDetailDTO, env);
             String responseStr = nacosGwClient.distribute(gwRequestDTO);
             pushConfigResponseDTO = GsonUtils.fromJson(responseStr, QueryConfigResponseDTO.class);
