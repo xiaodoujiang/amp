@@ -1,5 +1,6 @@
 package cn.bmilk.amp.ampService.controller;
 
+import cn.bmilk.amp.ampService.dto.AppColonyBindDTO;
 import cn.bmilk.amp.ampService.dto.request.ApplicationRequestDTO;
 import cn.bmilk.amp.ampService.dto.response.AppDetailResponseDTO;
 import cn.bmilk.amp.ampService.dto.response.ApplicationResponseDTO;
@@ -12,6 +13,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -48,12 +50,12 @@ public class AppController {
     }
 
     @PostMapping("/colony/bind")
-    public BaseResponseDTO bindAppColony(@RequestBody ApplicationRequestDTO requestDTO) {
+    public BaseResponseDTO bindAppColony(@RequestBody List<AppColonyBindDTO> appColonyBindDTOList) {
         try {
-            appService.bindAppColony(requestDTO);
+            appService.bindAppColony(appColonyBindDTOList);
             return BaseResponseDTO.SUCCESS();
         }catch (Exception e){
-            log.error("AppController bindAppColony exception, requestDTO[{}], errMsg[{}]", requestDTO, e.getMessage(), e);
+            log.error("AppController bindAppColony exception, requestDTO[{}], errMsg[{}]", appColonyBindDTOList, e.getMessage(), e);
             return BaseResponseDTO.FAILURE(ResponseCodeEnum.SYSTEM_ERROR, e.getMessage());
         }
     }

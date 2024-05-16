@@ -53,13 +53,13 @@ public class AppService {
         return AppDetailResponseDTO.build(ampApplicationEntity);
     }
 
-    public void bindAppColony(ApplicationRequestDTO requestDTO){
+    public void bindAppColony( List<AppColonyBindDTO> appColonyBindDTOList){
         List<AmpAppColonyRelEntity> appColonyRelEntityList = new ArrayList<>();
 
         List<AmpColonyConfigEntity> colonyConfigEntityList = new ArrayList<>();
         List<AmpConfigSyncRecordEntity> configSyncRecordList = new ArrayList<>();
 
-        for (AppColonyBindDTO appColonyBindDTO : requestDTO.getAppColonyBindDTOList()){
+        for (AppColonyBindDTO appColonyBindDTO : appColonyBindDTOList){
             AmpAppColonyRelEntity ampAppColonyRelEntity = AmpAppColonyRelEntity.build(appColonyBindDTO);
             appColonyRelEntityList.add(ampAppColonyRelEntity);
             AmpColonyEntity ampColonyEntity = ampColonyMapper.queryByName(appColonyBindDTO.getColonyName());
