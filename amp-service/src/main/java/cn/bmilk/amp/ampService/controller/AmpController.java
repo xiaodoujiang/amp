@@ -40,14 +40,14 @@ public class AmpController {
         return responseDTO;
     }
 
-    @GetMapping("/ampNo")
+    @GetMapping("/detail")
     public BaseResponseDTO queryAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
         AmpRecordResponseDTO responseDTO = ampService.queryAmpRecord(ampNo);
         return BaseResponseDTO.SUCCESS(responseDTO);
     }
 
     @GetMapping("/list")
-    public BaseResponseDTO queryAmpRecordList(@RequestParam(value = "user", required = false) String createUser,
+    public BaseResponseDTO queryAmpRecordList(@RequestParam(value = "createUser", required = false) String createUser,
                                               @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize,
                                               @RequestParam(name = "pageNo", required = false, defaultValue = "1") int pageNo) {
         List<AmpRecordResponseDTO> responseDTO = ampService.queryAmpRecordList(createUser, pageSize, pageNo);
@@ -55,10 +55,10 @@ public class AmpController {
     }
 
     @PostMapping("/delete")
-    public BaseResponseDTO deleteAmpRecord(@RequestParam(value = "ampNo") String ampNo) {
+    public BaseResponseDTO deleteAmpRecord(@RequestBody AmpRecordRequestDTO recordRequestDTO) {
         BaseResponseDTO baseResponseDTO = new BaseResponseDTO();
         try {
-            ampService.deleteAmpRecord(ampNo);
+            ampService.deleteAmpRecord(recordRequestDTO.getAmpNo());
             baseResponseDTO.setStatus(StatusEnum.SUCCESS.name());
             baseResponseDTO.setErrCode(ResponseCodeEnum.SUCCESS.getCode());
             baseResponseDTO.setErrMsg(ResponseCodeEnum.SUCCESS.getMsg());
